@@ -1,5 +1,5 @@
 Release Notes
-Version 4
+Version 4 (commit 20210203)
 Add comments to Family History table
 Add version to About menu item
 Standardize Pagination
@@ -9,6 +9,7 @@ added popovers
 
 todo:
 	 delete labtests table (keep labs table)
+	 Upgrade to Laravel 6.20.14 & PHP 7.2
 
 Version 3 (commit 20200310)
 Menu Updates (and associated MVCs):

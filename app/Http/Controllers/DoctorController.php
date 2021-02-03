@@ -16,11 +16,35 @@ class DoctorController extends Controller
      *
      * @return \Illuminate\Http\Response
      */
-    public function index()
+         
+    public function index(Request $request)
     {
-        $doc = Doctor::orderBy('name')->paginate(5);
+        $items = $request->items ?? 10;      // get the pagination number or a default
+        $doc = Doctor::orderBy('name')->paginate($items)->onEachSide(1);
 
-        return view('doctors.index',compact('doc')); 
+        return view('doctor.index',compact('doc','items')); 
+    }
+
+    Public function fetchData(Request $request)
+    {
+   
+     if($request->ajax())
+     {
+      
+      $sort_by = $request->get('sortby');
+      $sort_type = $request->get('sorttype');
+            $query = $request->get('query');
+            $query = str_replace(" ", "%", $query);
+            $items = $request->get('items');
+      $doc = DB::table('doctors')
+                    ->where('name', 'like', '%'.$query.'%')
+                    ->orWhere('specialty', 'like', '%'.$query.'%')
+                    ->orderBy($sort_by, $sort_type)
+                    ->paginate($items);
+  
+      return view('doctor.index_data', compact('doc'))->render();
+     
+     }
     }
 
     /**
@@ -30,7 +54,7 @@ class DoctorController extends Controller
      */
     public function create()
     {
-     return view('doctors.create');
+     return view('doctor.create');
     }
 
     /**
@@ -50,7 +74,7 @@ class DoctorController extends Controller
         $newRec->specialty = $request->get('specialty');
         $newRec->save();
  
-        return redirect('Doctor')->with('success','Doctor has been added');
+        return redirect('doctor')->with('success','Doctor has been added');
     }
 
     /**
@@ -73,7 +97,7 @@ class DoctorController extends Controller
     public function edit($id)
     {
         $doc = Doctor::find($id);
-        return view('doctors.edit',compact('doc','id'));
+        return view('doctor.edit',compact('doc','id'));
     }
 
     /**
@@ -93,7 +117,7 @@ class DoctorController extends Controller
         $doc->name = $request->get('name');
         $doc->specialty = $request->get('specialty');        
         $doc->save();
-        return redirect('Doctor');
+        return redirect('doctor');
     }
 
     /**
@@ -105,6 +129,7 @@ class DoctorController extends Controller
     public function destroy($id)
     {
        DB::table("doctors")->delete($id);
-        return response()->json(['success'=>"Doctor Deleted successfully.", 'tr'=>'tr_'.$id]);
+        //return response()->json(['success'=>"Doctor Deleted successfully.", 'tr'=>'tr_'.$id]);
+        return redirect('doctor')->with('success','Doctor Record has been deleted');
     }
 }

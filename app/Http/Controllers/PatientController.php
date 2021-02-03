@@ -22,7 +22,7 @@ class PatientController extends Controller
        // $member = Patient::get(); 
         $member = Patient::orderBy('name')->paginate(5);
 
-        return view('patients.index',compact('member')); 
+        return view('patient.index',compact('member')); 
     }
 
     /**
@@ -39,7 +39,7 @@ class PatientController extends Controller
         ->orderby('name','asc')
         ->pluck("name","id");
         
-        return view('patients.create',compact('doctors'));
+        return view('patient.create',compact('doctors'));
     }
 
     /**
@@ -59,7 +59,7 @@ class PatientController extends Controller
         $newRec->primaryDoctor = $request->get('primaryDoctor');
         $newRec->save();
  
-        return redirect('Patient')->with('success','Member has been added');
+        return redirect('patient')->with('success','Member has been added');
     }
 
     /**
@@ -85,7 +85,7 @@ class PatientController extends Controller
         $doctors = DB::table('doctors')
         ->orderby('name','asc')
         ->pluck("name","id");
-        return view('patients.edit',compact('member','id','doctors'));
+        return view('patient.edit',compact('member','id','doctors'));
     }
 
     /**
@@ -105,7 +105,7 @@ class PatientController extends Controller
         $member->name = $request->get('name');
         $member->primaryDoctor = $request->get('primaryDoctor');        
         $member->save();
-        return redirect('Patient');
+        return redirect('patient');
     }
 
     /**

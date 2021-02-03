@@ -21,9 +21,32 @@ class HealthController extends Controller
         
         $items = $request->items ?? 10;      // get the pagination number or a default
         /*$appt = beWell::get()->sortby('patientName'); */ 
-        $appt = beWell::filter($request)->orderBy('apptDate','desc')->paginate($items); 
+        $appt = beWell::filter($request)->orderBy('apptDate','desc')->paginate($items)->onEachSide(1); 
 
-        return view('bewells.index',compact('appt','items')); 
+        return view('bewell.index',compact('appt','items')); 
+    }
+
+    Public function fetchData(Request $request)
+    {
+    
+     if($request->ajax())
+     {
+      
+      $sort_by = $request->get('sortby');
+      $sort_type = $request->get('sorttype');
+            $query = $request->get('query');
+            $query = str_replace(" ", "%", $query);
+            $items = $request->get('items');
+      $appt = DB::table('be_wells')
+                    ->where('patientName', 'like', '%'.$query.'%')
+                    ->orWhere('apptDate', 'like', '%'.$query.'%')
+                    ->orWhere('doctorName', 'like', '%'.$query.'%')
+                    ->orWhere('doctorSpecialty', 'like', '%'.$query.'%')
+                    ->orderBy($sort_by, $sort_type)
+                    ->paginate($items);
+      return view('bewell.index_data', compact('appt'))->render();
+     
+     }
     }
 
     /**
@@ -45,7 +68,7 @@ class HealthController extends Controller
         $specialty = DB::table('doctors')
         ->orderby('specialty','asc')
         ->pluck("specialty","id");
-        return view('bewells.create',compact('patients','doctors','specialty'));
+        return view('bewell.create',compact('patients','doctors','specialty'));
     }
 
     /**
@@ -61,6 +84,8 @@ class HealthController extends Controller
         'apptDate' => 'required',
         'doctorName' => 'required',
         'doctorSpecialty' => 'required',
+        'fee' => 'numeric',
+         'vitalsWeight' => 'numeric',
         ]);
         $newRec = new beWell();
         $newRec->patientName = $request->get('patientName');
@@ -74,7 +99,7 @@ class HealthController extends Controller
         $newRec->vitalsBP = $request->get('vitalsBP');
         $newRec->save();
  
-        return redirect('MyHealth')->with('success','Appt has been added');
+        return redirect('myHealth')->with('success','Appt has been added');
     }
 
     /**
@@ -106,7 +131,7 @@ class HealthController extends Controller
         $specialty = DB::table('doctors')
         ->orderby('specialty','asc')
         ->pluck("specialty","id");
-        return view('bewells.edit',compact('appt','id','patients','doctors','specialty'));
+        return view('bewell.edit',compact('appt','id','patients','doctors','specialty'));
     }
 
     /**
@@ -123,6 +148,8 @@ class HealthController extends Controller
         'apptDate' => 'required',
         'doctorName' => 'required',
         'doctorSpecialty' => 'required',
+        'fee' => 'numeric',
+        'vitalsWeight' => 'numeric',
         ]);
         $appt= beWell::find($id);
         $appt->patientName = $request->get('patientName');
@@ -135,7 +162,7 @@ class HealthController extends Controller
         $appt->vitalsWeight = $request->get('vitalsWeight');
         $appt->vitalsBP = $request->get('vitalsBP');
         $appt->save();
-        return redirect('MyHealth');
+        return redirect('myHealth');
     }
 
     /**
@@ -146,14 +173,9 @@ class HealthController extends Controller
      */
     public function destroy($id)
     {
-        //$appt = Blog::find($id);
-        //dd($id);
-        //$appt->delete($id);
-        //return redirect('blogs')->with('success','Blog Has Been Deleted');
-       
         DB::table("be_wells")->delete($id);
-        return response()->json(['success'=>"Appt Deleted successfully.", 'tr'=>'tr_'.$id]);
-
+        //return response()->json(['success'=>"Appt Deleted successfully.", 'tr'=>'tr_'.$id]);
+        return redirect('myHealth')->with('success','Wellness Record has been deleted');
     }
 
     public function getSpecs($id)

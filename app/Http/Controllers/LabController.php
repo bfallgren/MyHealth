@@ -3,36 +3,47 @@
 namespace App\Http\Controllers;
 
 use Illuminate\Http\Request;
-use App\Labtest;
+use App\Lab;
 use Illuminate\Support\Facades\DB;
 use App\Http\Controllers\Controller;
 use Illuminate\Pagination\Paginator;
 use Illuminate\Pagination\LengthAwarePaginator;
+use Illuminate\Support\Facades\Log;
 
 class LabController extends Controller
 {
-    /**
-     * Display a listing of the resource.
-     *
-     * @return \Illuminate\Http\Response
-     */
     public function index(Request $request)
     {
-        $items = $request->items ?? 10;      // get the pagination number or a default
-       
-        $lab = Labtest::filter($request)->orderBy('testDate','desc')->paginate($items);  
-        $lab->withPath('Labs');
-        $lab->appends($request->all());
-
-        return view('labs.index',compact('lab','items')); 
+     
+    $items = $request->items ?? 10;      
+    /* get the pagination number or a default */
+     $data = DB::table('labs')->orderBy('testDate', 'desc')->orderBy('component', 'asc')->paginate($items)->onEachSide(1);
+     return view('newlab.index', compact('data','items'));
     }
 
-    /**
-     * Show the form for creating a new resource.
-     *
-     * @return \Illuminate\Http\Response
-     */
-    public function create()
+    Public function fetchData(Request $request)
+    {
+    
+     if($request->ajax())
+     {
+      
+      $sort_by = $request->get('sortby');
+      $sort_type = $request->get('sorttype');
+            $query = $request->get('query');
+            $query = str_replace(" ", "%", $query);
+            $items = $request->get('items');
+      $data = DB::table('labs')
+                    ->where('patientName', 'like', '%'.$query.'%')
+                    ->orWhere('component', 'like', '%'.$query.'%')
+                    ->orWhere('testDate', 'like', '%'.$query.'%')
+                    ->orderBy($sort_by, $sort_type)
+                    ->paginate($items);
+      return view('newlab.index_data', compact('data'))->render();
+     
+     }
+    }
+
+public function create()
     {
      /*
             ADDED FOR DYNAMIC DROPDOWN
@@ -43,7 +54,7 @@ class LabController extends Controller
         $doctors = DB::table('doctors')
         ->orderby('name','asc')
         ->pluck("name","id");
-        return view('labs.create',compact('patients','doctors'));
+        return view('newlab.create',compact('patients','doctors'));
     }
 
     /**
@@ -58,10 +69,10 @@ class LabController extends Controller
         'patientName' => 'required',
         'testDate' => 'required',
         'component' => 'required',
-        'measuredValue' => 'required',
+        'measuredValue' => 'required|numeric',
         ]);
 
-        $newRec = new Labtest();
+        $newRec = new Lab();
         $newRec->patientName = $request->get('patientName');
         $newRec->testDate = $request->get('testDate');
         $newRec->component = $request->get('component');
@@ -70,7 +81,7 @@ class LabController extends Controller
         $newRec->comments = $request->get('comments');
         $newRec->save();
  
-        return redirect('Labs')->with('success','Labtest has been added');
+        return redirect('lab')->with('success','Lab Record has been added');
     }
 
     /**
@@ -92,14 +103,14 @@ class LabController extends Controller
      */
     public function edit($id)
     {
-        $lab = Labtest::find($id);
+        $data = Lab::find($id);
         $patients = DB::table('patients')
         ->orderby('name','asc')
         ->pluck("name","id");
         $doctors = DB::table('doctors')
         ->orderby('name','asc')
         ->pluck("name","id");
-        return view('labs.edit',compact('lab','id','patients','doctors'));
+        return view('newlab.edit',compact('data','id','patients','doctors'));
     }
 
     /**
@@ -115,16 +126,17 @@ class LabController extends Controller
         'patientName' => 'required',
         'testDate' => 'required',
         'component' => 'required',
+        'measuredValue' => 'required|numeric',
         ]);
-        $lab = Labtest::find($id);
-        $lab->patientName = $request->get('patientName');
-        $lab->testDate = $request->get('testDate');
-        $lab->component = $request->get('component');
-        $lab->measuredValue = $request->get('measuredValue');
-        $lab->goodRange = $request->get('goodRange');
-        $lab->comments = $request->get('comments');
-        $lab->save();
-        return redirect('Labs');
+        $data = Lab::find($id);
+        $data->patientName = $request->get('patientName');
+        $data->testDate = $request->get('testDate');
+        $data->component = $request->get('component');
+        $data->measuredValue = $request->get('measuredValue');
+        $data->goodRange = $request->get('goodRange');
+        $data->comments = $request->get('comments');
+        $data->save();
+        return redirect('lab');
     }
 
     /**
@@ -135,14 +147,9 @@ class LabController extends Controller
      */
     public function destroy($id)
     {
-        //$lab = Blog::find($id);
-        //dd($id);
-        //$lab->delete($id);
-        //return redirect('blogs')->with('success','Blog Has Been Deleted');
-       
-        DB::table("labtests")->delete($id);
-        return response()->json(['success'=>"Labtest Deleted successfully.", 'tr'=>'tr_'.$id]);
-
-    }
-
+        DB::table("labs")->delete($id);
+        //return response()->json(['success'=>"Lab Record Deleted successfully.", 'tr'=>'tr_'.$id]);
+        return redirect('lab')->with('success','LabTest Record has been deleted');
+    }    
 }
+?>

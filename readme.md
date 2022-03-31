@@ -9,7 +9,8 @@
 
 ## About
 
-<p align="center"><img src="https://laravel.com/assets/img/components/logo-laravel.svg"></p>
+![GitHub Logo](/public/images/healthcare.jpg)
+
 Personal Health Record features:
 
     Imaging 

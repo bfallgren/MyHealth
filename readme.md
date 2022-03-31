@@ -7,6 +7,27 @@
 <a href="https://packagist.org/packages/laravel/framework"><img src="https://poser.pugx.org/laravel/framework/license.svg" alt="License"></a>
 </p>
 
+## About
+
+<p align="center"><img src="https://laravel.com/assets/img/components/logo-laravel.svg"></p>
+Personal Health Record features:
+
+    Imaging 
+    Immunizations
+    Lab tests
+    Medications
+    Surgery/Procedures
+    Wellness Visits
+    
+    
+Profiles:
+
+    Patients (User authentication)
+    Doctors
+    Family History
+    
+
+
 ## Installation
 
 1.	git clone

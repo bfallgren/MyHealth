@@ -17,15 +17,31 @@ class PatientController extends Controller
      *
      * @return \Illuminate\Http\Response
      */
-    public function index()
-    {
-       // $member = Patient::get(); 
-        $member = Patient::orderBy('name')->paginate(5);
 
-        return view('patients.index',compact('member')); 
+
+    public function index(Request $request)
+    {
+      if(request()->ajax()) {
+        return datatables()->of(Patient::select('*'))
+       
+        ->addColumn('action', function ($rows) {
+          $button = '<div class="btn-group btn-group-xs">';
+          $button .= '<a href="/patient/' . $rows->id . '/edit" title="Edit" ><i class="fa fa-edit" style="font-size:24px"></i></a>';
+          $button .= '<button type="button" title="Delete" name="deleteButton" id="' . $rows->id . '" class="deleteButton"><i class="fas fa-trash-alt" style="color:red"></i></button>';
+          $button .= '</div>';
+          return $button;
+      })
+      ->rawColumns(['action'])
+      ->make(true);
+
+
     }
 
-    /**
+        return view('patient.index'); 
+    }
+
+
+     /**
      * Show the form for creating a new resource.
      *
      * @return \Illuminate\Http\Response
@@ -39,7 +55,7 @@ class PatientController extends Controller
         ->orderby('name','asc')
         ->pluck("name","id");
         
-        return view('patients.create',compact('doctors'));
+        return view('patient.create',compact('doctors'));
     }
 
     /**
@@ -59,7 +75,7 @@ class PatientController extends Controller
         $newRec->primaryDoctor = $request->get('primaryDoctor');
         $newRec->save();
  
-        return redirect('Patient')->with('success','Member has been added');
+        return redirect('patient')->with('success','Member has been added');
     }
 
     /**
@@ -85,7 +101,7 @@ class PatientController extends Controller
         $doctors = DB::table('doctors')
         ->orderby('name','asc')
         ->pluck("name","id");
-        return view('patients.edit',compact('member','id','doctors'));
+        return view('patient.edit',compact('member','id','doctors'));
     }
 
     /**
@@ -105,7 +121,7 @@ class PatientController extends Controller
         $member->name = $request->get('name');
         $member->primaryDoctor = $request->get('primaryDoctor');        
         $member->save();
-        return redirect('Patient');
+        return redirect('patient');
     }
 
     /**
@@ -117,6 +133,7 @@ class PatientController extends Controller
     public function destroy($id)
     {
        DB::table("patients")->delete($id);
-        return response()->json(['success'=>"member Deleted successfully.", 'tr'=>'tr_'.$id]);
+       // return response()->json(['success'=>"member Deleted successfully.", 'tr'=>'tr_'.$id]);
+       return redirect('patient')->with('success','Member has been deleted');
     }
 }

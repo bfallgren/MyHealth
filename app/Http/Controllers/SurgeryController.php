@@ -8,6 +8,7 @@ use Illuminate\Support\Facades\DB;
 use App\Http\Controllers\Controller;
 use Illuminate\Pagination\Paginator;
 use Illuminate\Pagination\LengthAwarePaginator;
+use Auth;
 
 class SurgeryController extends Controller
 {
@@ -18,11 +19,31 @@ class SurgeryController extends Controller
      */
     public function index(Request $request)
     {
-         $items = $request->items ?? 10;      // get the pagination number or a default
+        $currentuser = Auth::user()->name;
+        
+        $data = DB::table('surgeries')
+        ->select('surgeries.*')
+        ->where('patientName','=',$currentuser)
+        ->orderBy('apptDate', 'desc')
+        ->get();
       
-        $oper = Surgery::filter($request)->orderBy('apptDate','desc')->paginate($items);  
+        if(request()->ajax()) {
+            return datatables()->of($data)
+       
+        ->addColumn('action', function ($rows) {
+          $button = '<div class="btn-group btn-group-xs">';
+          $button .= '<a href="/surgery/' . $rows->id . '/edit" title="Edit" ><i class="fa fa-edit" style="font-size:24px"></i></a>';
+          $button .= '<button type="button" title="Delete" name="deleteButton" id="' . $rows->id . '" class="deleteButton"><i class="fas fa-trash-alt" style="color:red"></i></button>';
+          $button .= '</div>';
+          return $button;
+      })
+      ->rawColumns(['action'])
+      ->make(true);
 
-        return view('surgerys.index',compact('oper','items')); 
+
+    }
+
+        return view('surgery.index'); 
     }
 
     /**
@@ -44,7 +65,7 @@ class SurgeryController extends Controller
         $specialty = DB::table('doctors')
         ->orderby('specialty','asc')
         ->pluck("specialty","id");
-        return view('surgerys.create',compact('patients','doctors','specialty'));
+        return view('surgery.create',compact('patients','doctors','specialty'));
     }
 
     /**
@@ -60,6 +81,7 @@ class SurgeryController extends Controller
         'apptDate' => 'required',
         'doctorName' => 'required',
         'doctorSpecialty' => 'required',
+        'fee' => 'numeric',
 ]);
 
         $newRec = new Surgery();
@@ -70,11 +92,9 @@ class SurgeryController extends Controller
         $newRec->fee = $request->get('fee');
         $newRec->reason = $request->get('reason');
         $newRec->diagnosis = $request->get('diagnosis');
-        $newRec->vitalsWeight = $request->get('vitalsWeight');
-        $newRec->vitalsBP = $request->get('vitalsBP');
         $newRec->save();
  
-        return redirect('Surgery')->with('success','Surgery has been added');
+        return redirect('surgery')->with('success','Surgery has been added');
     }
 
     /**
@@ -106,7 +126,7 @@ class SurgeryController extends Controller
         $specialty = DB::table('doctors')
         ->orderby('specialty','asc')
         ->pluck("specialty","id");
-        return view('surgerys.edit',compact('oper','id','patients','doctors','specialty'));
+        return view('surgery.edit',compact('oper','id','patients','doctors','specialty'));
     }
 
     /**
@@ -123,6 +143,7 @@ class SurgeryController extends Controller
         'apptDate' => 'required',
         'doctorName' => 'required',
         'doctorSpecialty' => 'required',
+        'fee' => 'numeric',
 ]);
         $oper= Surgery::find($id);
         $oper->patientName = $request->get('patientName');
@@ -132,10 +153,8 @@ class SurgeryController extends Controller
         $oper->fee = $request->get('fee');
         $oper->reason = $request->get('reason');
         $oper->diagnosis = $request->get('diagnosis');
-        $oper->vitalsWeight = $request->get('vitalsWeight');
-        $oper->vitalsBP = $request->get('vitalsBP');
         $oper->save();
-        return redirect('Surgery');
+        return redirect('surgery');
     }
 
     /**
@@ -146,11 +165,6 @@ class SurgeryController extends Controller
      */
     public function destroy($id)
     {
-        //$oper = Blog::find($id);
-        //dd($id);
-        //$oper->delete($id);
-        //return redirect('blogs')->with('success','Blog Has Been Deleted');
-       
         DB::table("surgeries")->delete($id);
         return response()->json(['success'=>"Surgery/Procedure Deleted successfully.", 'tr'=>'tr_'.$id]);
 

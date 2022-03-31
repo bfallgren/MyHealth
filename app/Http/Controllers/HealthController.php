@@ -8,6 +8,7 @@ use Illuminate\Support\Facades\DB;
 use App\Http\Controllers\Controller;
 use Illuminate\Pagination\Paginator;
 use Illuminate\Pagination\LengthAwarePaginator;
+use Auth;
 
 class HealthController extends Controller
 {
@@ -18,12 +19,31 @@ class HealthController extends Controller
      */
     public function index(Request $request)
     {
+        $currentuser = Auth::user()->name;
         
-        $items = $request->items ?? 10;      // get the pagination number or a default
-        /*$appt = beWell::get()->sortby('patientName'); */ 
-        $appt = beWell::filter($request)->orderBy('apptDate','desc')->paginate($items); 
+        $data = DB::table('be_wells')
+        ->select('be_wells.*')
+        ->where('patientName','=',$currentuser)
+        ->orderBy('apptDate', 'desc')
+        ->get();
+      
+        if(request()->ajax()) {
+            return datatables()->of($data)
+       
+        ->addColumn('action', function ($rows) {
+          $button = '<div class="btn-group btn-group-xs">';
+          $button .= '<a href="/myHealth/' . $rows->id .  '/edit" title="Edit" ><i class="fa fa-edit" style="font-size:24px"></i></a>';
+          $button .= '<button type="button" title="Delete" name="deleteButton" id="' . $rows->id . '" class="deleteButton"><i class="fas fa-trash-alt" style="color:red"></i></button>';
+          $button .= '</div>';
+          return $button;
+      })
+      ->rawColumns(['action'])
+      ->make(true);
 
-        return view('bewells.index',compact('appt','items')); 
+
+    }
+
+        return view('bewell.index'); 
     }
 
     /**
@@ -45,7 +65,7 @@ class HealthController extends Controller
         $specialty = DB::table('doctors')
         ->orderby('specialty','asc')
         ->pluck("specialty","id");
-        return view('bewells.create',compact('patients','doctors','specialty'));
+        return view('bewell.create',compact('patients','doctors','specialty'));
     }
 
     /**
@@ -61,6 +81,8 @@ class HealthController extends Controller
         'apptDate' => 'required',
         'doctorName' => 'required',
         'doctorSpecialty' => 'required',
+        'fee' => 'numeric',
+         'vitalsWeight' => 'numeric',
         ]);
         $newRec = new beWell();
         $newRec->patientName = $request->get('patientName');
@@ -74,7 +96,7 @@ class HealthController extends Controller
         $newRec->vitalsBP = $request->get('vitalsBP');
         $newRec->save();
  
-        return redirect('MyHealth')->with('success','Appt has been added');
+        return redirect('myHealth')->with('success','Appt has been added');
     }
 
     /**
@@ -106,7 +128,7 @@ class HealthController extends Controller
         $specialty = DB::table('doctors')
         ->orderby('specialty','asc')
         ->pluck("specialty","id");
-        return view('bewells.edit',compact('appt','id','patients','doctors','specialty'));
+        return view('bewell.edit',compact('appt','id','patients','doctors','specialty'));
     }
 
     /**
@@ -123,6 +145,8 @@ class HealthController extends Controller
         'apptDate' => 'required',
         'doctorName' => 'required',
         'doctorSpecialty' => 'required',
+        'fee' => 'numeric',
+        'vitalsWeight' => 'numeric',
         ]);
         $appt= beWell::find($id);
         $appt->patientName = $request->get('patientName');
@@ -135,7 +159,7 @@ class HealthController extends Controller
         $appt->vitalsWeight = $request->get('vitalsWeight');
         $appt->vitalsBP = $request->get('vitalsBP');
         $appt->save();
-        return redirect('MyHealth');
+        return redirect('myHealth');
     }
 
     /**
@@ -146,14 +170,9 @@ class HealthController extends Controller
      */
     public function destroy($id)
     {
-        //$appt = Blog::find($id);
-        //dd($id);
-        //$appt->delete($id);
-        //return redirect('blogs')->with('success','Blog Has Been Deleted');
-       
         DB::table("be_wells")->delete($id);
-        return response()->json(['success'=>"Appt Deleted successfully.", 'tr'=>'tr_'.$id]);
-
+        //return response()->json(['success'=>"Appt Deleted successfully.", 'tr'=>'tr_'.$id]);
+        return redirect('myHealth')->with('success','Wellness Record has been deleted');
     }
 
     public function getSpecs($id)

@@ -1,0 +1,76 @@
+Release Notes
+Version 4.2 (commit 2220331)
+-- Added Authentication to filter rows for current user
+
+ToDo:
+add patient doctor relationship 
+print patients doctors 
+limit imaging diagnosis field
+
+Version 4.1
+-- Converted to Datatables
+-- Deleted Labtests table and updated Migration
+-- todo: fix getSpecs (imaging, surgery, wellness)
+
+Version 4
+-- Add comments to Family History table
+-- Add version to About menu item
+-- Standardize Pagination
+-- Fix pagination link color
+-- clean up css
+-- added popovers
+
+Version 3 (commit 20200310)
+--  Menu Updates (and associated MVCs):
+--	Removed Reports
+--	Added Top Menu (Profile, health records)
+--	Added profile menu item 'family history'
+--	Added health records menu items 'imaging', 'immunization', 'medications'
+--  Added text search and column sorting to Lab and Immunization views
+--  Removed BP and weight from Surgery views
+--  Improved field edits
+
+version 2.2 (commit 20191123)
+
+-- Reformatted home/welcome page and added centerPage style sheet
+-- Fixed topPage style sheet
+-- Iconized views and menus
+-- widened doctor and doctor specialty fields
+-- Weight and fee are now required fields
+-- Changed title to MyHealth
+-- Widened specialty field to 120px
+-- Limit Paginatuion links - onEachSide(1)
+
+Work-In-Progress
+
+--  multi-column search and column sort functionality
+--  family history
+--  immunizations
+--  medications
+
+
+Version 2.1 (commit 20191031)
+
+-- Added Doctor Specialty auto-populate
+-- Added Menu to home page
+-- Sort and Paginate Doctors/Patients
+-- Updated app.css style sheet
+-- Remove ID display from Index views
+-- change Lab Index view to filter on component
+-- Changed filter in Wellness and Surgery Index view: label change to filter by doctor and query changed to 'like'
+-- Changed .env MySql section to 'charset' => 'utf8' and 'collation' => 'utf8_unicode_ci'
+-- Changed div class (id=app) in app.blade.php to container-fluid 
+-- Sort by Date for Wellness, Lab and Surgery Index views
+-- Added 'records per page' for Wellness, Lab & Surgery (default 5)
+
+Version 2 (commit 20190812)
+-- Fix testDate field in db
+-- Fix measuredValue field in db
+-- Set limit on input field size
+-- Changed measuredValue in db to Float(6,2)
+-- Added Create view edits for weight and value
+-- ReSize db
+-- Edit views: add dropdown for patientName/doctorName
+-- Index views: add scrollable text box 
+
+Version 1 (initial)

@@ -8,6 +8,7 @@ use Illuminate\Support\Facades\DB;
 use App\Http\Controllers\Controller;
 use Illuminate\Pagination\Paginator;
 use Illuminate\Pagination\LengthAwarePaginator;
+use Datatables;
 
 class DoctorController extends Controller
 {
@@ -16,12 +17,29 @@ class DoctorController extends Controller
      *
      * @return \Illuminate\Http\Response
      */
-    public function index()
+         
+    public function index(Request $request)
     {
-        $doc = Doctor::orderBy('name')->paginate(5);
+      if(request()->ajax()) {
+        return datatables()->of(Doctor::select('*'))
+       
+        ->addColumn('action', function ($rows) {
+          $button = '<div class="btn-group btn-group-xs">';
+          $button .= '<a href="/doctor/' . $rows->id . '/edit" title="Edit" ><i class="fa fa-edit" style="font-size:24px"></i></a>';
+          $button .= '<button type="button" title="Delete" name="deleteButton" id="' . $rows->id . '" class="deleteButton"><i class="fas fa-trash-alt" style="color:red"></i></button>';
+          $button .= '</div>';
+          return $button;
+      })
+      ->rawColumns(['action'])
+      ->make(true);
 
-        return view('doctors.index',compact('doc')); 
+
     }
+
+        return view('doctor.index'); 
+    }
+
+    
 
     /**
      * Show the form for creating a new resource.
@@ -30,7 +48,7 @@ class DoctorController extends Controller
      */
     public function create()
     {
-     return view('doctors.create');
+     return view('doctor.create');
     }
 
     /**
@@ -50,7 +68,7 @@ class DoctorController extends Controller
         $newRec->specialty = $request->get('specialty');
         $newRec->save();
  
-        return redirect('Doctor')->with('success','Doctor has been added');
+        return redirect('doctor')->with('success','Doctor has been added');
     }
 
     /**
@@ -73,7 +91,7 @@ class DoctorController extends Controller
     public function edit($id)
     {
         $doc = Doctor::find($id);
-        return view('doctors.edit',compact('doc','id'));
+        return view('doctor.edit',compact('doc','id'));
     }
 
     /**
@@ -93,7 +111,7 @@ class DoctorController extends Controller
         $doc->name = $request->get('name');
         $doc->specialty = $request->get('specialty');        
         $doc->save();
-        return redirect('Doctor');
+        return redirect('doctor');
     }
 
     /**
@@ -105,6 +123,7 @@ class DoctorController extends Controller
     public function destroy($id)
     {
        DB::table("doctors")->delete($id);
-        return response()->json(['success'=>"Doctor Deleted successfully.", 'tr'=>'tr_'.$id]);
+        //return response()->json(['success'=>"Doctor Deleted successfully.", 'tr'=>'tr_'.$id]);
+        return redirect('doctor')->with('success','Doctor Record has been deleted');
     }
 }

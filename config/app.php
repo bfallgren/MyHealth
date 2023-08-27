@@ -161,6 +161,8 @@ return [
         Illuminate\Translation\TranslationServiceProvider::class,
         Illuminate\Validation\ValidationServiceProvider::class,
         Illuminate\View\ViewServiceProvider::class,
+        Yajra\DataTables\DataTablesServiceProvider::class,
+
 
         /*
          * Package Service Providers...
@@ -174,7 +176,7 @@ return [
         // App\Providers\BroadcastServiceProvider::class,
         App\Providers\EventServiceProvider::class,
         App\Providers\RouteServiceProvider::class,
-
+        Collective\Html\HtmlServiceProvider::class,
     ],
 
     /*
@@ -227,6 +229,8 @@ return [
         'View' => Illuminate\Support\Facades\View::class,
         'Form' => 'Collective\Html\FormFacade',
         'HTML' => 'Collective\Html\HtmlFacade',
+        'DataTables'=> Yajra\DataTables\Facades\DataTables::class,
+
 
     ],
 

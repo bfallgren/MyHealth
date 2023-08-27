@@ -47,7 +47,7 @@
                 </div>
 
                 <div class="m-b-md">
-                    Powered by Laravel & MySql
+                    Powered by Laravel & Sqlite
                 </div> 
 
                 <div class="links">

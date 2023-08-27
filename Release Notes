@@ -1,8 +1,53 @@
 Release Notes
+Version 5.1
+--  Added abnormal flag in newlab index blade view
+--  Added auth:check for session timeout, to index, create & edit function in all controllers
+--  Added patient detail to patient model (fullname, birthdate, insurance, memberid) - 
+--       migrate db first 
+--  Added fullname and birthdate to print and pdf functions in affected modules - wellness, imaging, 
+--      meds, vaccines, labs, surgeries
+--  Added location, hospital, active (flag), doctorRating, staffRating, services to Doctor model - 
+--      migrate db first
+--  updated help function in app.blade view
+--  Replaced patient name with patient ID in all models and applied to controllers/views
+--  Convert PatientID to numeric value
+--  Restrict profile results to authenticated users
+--  Removed app/filter modules (using datatables)
+--  turned off search/paging feature for Patient index view
+--  Upgraded to Laravel v7
 
-version 3.1 (commit 20191123)
 
--- Reformatted home/welcme page and added centerPage style sheet
+
+Version 4.2 (commit 20220331)
+-- Added Authentication to filter rows for current user
+
+
+Version 4.1
+-- Converted to Datatables
+-- Deleted Labtests table and updated Migration
+-- todo: fix getSpecs (imaging, surgery, wellness)
+
+Version 4
+-- Add comments to Family History table
+-- Add version to About menu item
+-- Standardize Pagination
+-- Fix pagination link color
+-- clean up css
+-- added popovers
+
+Version 3 (commit 20200310)
+--  Menu Updates (and associated MVCs):
+--	Removed Reports
+--	Added Top Menu (Profile, health records)
+--	Added profile menu item 'family history'
+--	Added health records menu items 'imaging', 'immunization', 'medications'
+--  Added text search and column sorting to Lab and Immunization views
+--  Removed BP and weight from Surgery views
+--  Improved field edits
+
+version 2.2 (commit 20191123)
+
+-- Reformatted home/welcome page and added centerPage style sheet
 -- Fixed topPage style sheet
 -- Iconized views and menus
 -- widened doctor and doctor specialty fields
@@ -19,7 +64,7 @@ Work-In-Progress
 --  medications
 
 
-Version 3 (commit 20191031)
+Version 2.1 (commit 20191031)
 
 -- Added Doctor Specialty auto-populate
 -- Added Menu to home page
@@ -42,3 +87,5 @@ Version 2 (commit 20190812)
 -- ReSize db
 -- Edit views: add dropdown for patientName/doctorName
 -- Index views: add scrollable text box 
+
+Version 1 (initial)

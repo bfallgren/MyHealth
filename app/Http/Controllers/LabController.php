@@ -3,47 +3,63 @@
 namespace App\Http\Controllers;
 
 use Illuminate\Http\Request;
-use App\Labtest;
+use App\Lab;
 use Illuminate\Support\Facades\DB;
 use App\Http\Controllers\Controller;
 use Illuminate\Pagination\Paginator;
 use Illuminate\Pagination\LengthAwarePaginator;
+use Illuminate\Support\Facades\Log;
+use Auth;
 
 class LabController extends Controller
 {
-    /**
-     * Display a listing of the resource.
-     *
-     * @return \Illuminate\Http\Response
-     */
     public function index(Request $request)
     {
-        $items = $request->items ?? 10;      // get the pagination number or a default
-       
-        $lab = Labtest::filter($request)->orderBy('testDate','desc')->paginate($items);  
-        $lab->withPath('Labs');
-        $lab->appends($request->all());
+        if(Auth::check()) { 
+            $currentuser = Auth::user()->id;
+           
+            $data = DB::table('labs')
+            ->join('patients','patients.id','labs.patientID')
+            ->select('labs.*','patients.fullName','patients.birthDate')
+            ->where('patientID','=',$currentuser)
+            ->orderBy('testDate', 'desc')
+            ->get();
 
-        return view('labs.index',compact('lab','items')); 
+            if(request()->ajax()) {
+                return datatables()->of($data)    
+                ->addColumn('clickme', function ($rows) {
+                })
+                ->addColumn('action', function ($rows) {
+                    $button = '<div class="btn-group btn-group-xs">';
+                    $button .= '<a href="/lab/' . $rows->id . '/edit" title="Edit" ><i class="fa fa-edit" style="font-size:24px"></i></a>';
+                    $button .= '<button type="button" title="Delete" name="deleteButton" id="' . $rows->id . '" class="deleteButton"><i class="fas fa-trash-alt" style="color:red"></i></button>';
+                    $button .= '</div>';
+                    return $button;
+                })
+                ->rawColumns(['action'])
+                ->make(true);
+            }
+                return view('newlab.index'); 
+        }
+        else {
+            return redirect()->to('/');
+        }
     }
 
-    /**
-     * Show the form for creating a new resource.
-     *
-     * @return \Illuminate\Http\Response
-     */
     public function create()
     {
+        if(Auth::check()) {  
      /*
             ADDED FOR DYNAMIC DROPDOWN
     */
-        $patients = DB::table('patients')
-        ->orderby('name','asc')
-        ->pluck("name","id");
-        $doctors = DB::table('doctors')
-        ->orderby('name','asc')
-        ->pluck("name","id");
-        return view('labs.create',compact('patients','doctors'));
+            $doctors = DB::table('doctors')
+            ->orderby('name','asc')
+            ->pluck("name","id");
+            return view('newlab.create',compact('doctors'));
+        }
+        else {
+            return redirect()->to('/');    
+        }
     }
 
     /**
@@ -55,14 +71,14 @@ class LabController extends Controller
     public function store(Request $request)
     {
         $request->validate([
-        'patientName' => 'required',
         'testDate' => 'required',
         'component' => 'required',
-        'measuredValue' => 'required',
+        'measuredValue' => 'required|numeric',
         ]);
 
-        $newRec = new Labtest();
-        $newRec->patientName = $request->get('patientName');
+        $newRec = new Lab();
+        $currentuser = Auth::user()->id;
+        $newRec->patientID = $currentuser;
         $newRec->testDate = $request->get('testDate');
         $newRec->component = $request->get('component');
         $newRec->measuredValue = $request->get('measuredValue');
@@ -70,7 +86,7 @@ class LabController extends Controller
         $newRec->comments = $request->get('comments');
         $newRec->save();
  
-        return redirect('Labs')->with('success','Labtest has been added');
+        return redirect('lab')->with('success','Lab Record has been added');
     }
 
     /**
@@ -92,14 +108,16 @@ class LabController extends Controller
      */
     public function edit($id)
     {
-        $lab = Labtest::find($id);
-        $patients = DB::table('patients')
-        ->orderby('name','asc')
-        ->pluck("name","id");
-        $doctors = DB::table('doctors')
-        ->orderby('name','asc')
-        ->pluck("name","id");
-        return view('labs.edit',compact('lab','id','patients','doctors'));
+        if(Auth::check()) {   
+            $data = Lab::find($id);
+            $doctors = DB::table('doctors')
+            ->orderby('name','asc')
+            ->pluck("name","id");
+            return view('newlab.edit',compact('data','id','doctors'));
+        }
+        else {
+            return redirect()->to('/');    
+        }
     }
 
     /**
@@ -112,19 +130,20 @@ class LabController extends Controller
     public function update(Request $request, $id)
     {
          $request->validate([
-        'patientName' => 'required',
         'testDate' => 'required',
         'component' => 'required',
+        'measuredValue' => 'required|numeric',
         ]);
-        $lab = Labtest::find($id);
-        $lab->patientName = $request->get('patientName');
-        $lab->testDate = $request->get('testDate');
-        $lab->component = $request->get('component');
-        $lab->measuredValue = $request->get('measuredValue');
-        $lab->goodRange = $request->get('goodRange');
-        $lab->comments = $request->get('comments');
-        $lab->save();
-        return redirect('Labs');
+        $data = Lab::find($id);
+        $currentuser = Auth::user()->id;
+        $data->patientID = $currentuser;
+        $data->testDate = $request->get('testDate');
+        $data->component = $request->get('component');
+        $data->measuredValue = $request->get('measuredValue');
+        $data->goodRange = $request->get('goodRange');
+        $data->comments = $request->get('comments');
+        $data->save();
+        return redirect('lab');
     }
 
     /**
@@ -135,14 +154,7 @@ class LabController extends Controller
      */
     public function destroy($id)
     {
-        //$lab = Blog::find($id);
-        //dd($id);
-        //$lab->delete($id);
-        //return redirect('blogs')->with('success','Blog Has Been Deleted');
-       
-        DB::table("labtests")->delete($id);
-        return response()->json(['success'=>"Labtest Deleted successfully.", 'tr'=>'tr_'.$id]);
-
-    }
-
+        DB::table("labs")->delete($id);
+        return redirect('lab')->with('success','LabTest Record has been deleted');
+    }    
 }

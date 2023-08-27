@@ -15,18 +15,37 @@ Route::get('/', function () {
     return view('welcome');
 });
 
-Route::resource('MyHealth', 'HealthController');
-Route::resource('Patient', 'PatientController');
-Route::resource('Doctor', 'DoctorController');
-Route::resource('Surgery', 'SurgeryController');
-Route::resource('Labs', 'LabController');
+Route::resource('myHealth', 'HealthController');
+Route::resource('patient', 'PatientController');
+Route::resource('doctor', 'DoctorController');
+Route::resource('surgery', 'SurgeryController');
+Route::resource('meds', 'MedController');
+Route::resource('fam', 'FamhistController');
+Route::resource('imaging', 'ImageController');
+Route::resource('lab', 'LabController');
+Route::resource('vaccine', 'VaccineController');
 
 /* THE FOLLOWING ARE USED FOR ALIAS IN APPS.BLADE.PHP */
-Route::get('MyHealth', array('as' => 'wellness', 'uses' => 'HealthController@index'));
-Route::get('Doctor', array('as' => 'mydoc', 'uses' => 'DoctorController@index'));
-Route::get('Patient', array('as' => 'member', 'uses' => 'PatientController@index'));
-Route::get('Surgery', array('as' => 'mysurgery', 'uses' => 'SurgeryController@index'));
-Route::get('Labs', array('as' => 'mylabs', 'uses' => 'LabController@index'));
+Route::get('fetchWellness', 'HealthController@fetchData'); /* wellness search Route */
+Route::get('myHealth', array('as' => 'wellness', 'uses' => 'HealthController@index'));
+Route::get('doctor', array('as' => 'mydoc', 'uses' => 'DoctorController@index'));
+Route::get('patient', array('as' => 'member', 'uses' => 'PatientController@index'));
+Route::get('surgery', array('as' => 'mysurgery', 'uses' => 'SurgeryController@index'));
+Route::get('lab',array('as' => 'mylab', 'uses' =>'LabController@index'));
+Route::get('vaccine',array('as' => 'myshots', 'uses' =>'VaccineController@index'));
+Route::get('meds', array('as' => 'mymeds', 'uses' => 'MedController@index'));
+Route::get('fam', array('as' => 'myfam', 'uses' => 'FamhistController@index'));
+Route::get('imaging', array('as' => 'myimaging', 'uses' => 'ImageController@index'));
+
 /* THE FOLLOWING IS USED TO POPULATE DOCTOR SPECIALTY */
-Route::get('Surgery/getSpecs/{id}', 'SurgeryController@getSpecs');
-Route::get('MyHealth/getSpecs/{id}', 'HealthController@getSpecs');
+Route::get('surgery/getSpecs/{id}', 'SurgeryController@getSpecs');
+Route::get('myHealth/getSpecs/{id}', 'HealthController@getSpecs');
+Route::get('imaging/getSpecs/{id}', 'ImageController@getSpecs');
+
+
+
+
+Auth::routes();
+
+Route::get('/home', 'HomeController@index')->name('home');
+

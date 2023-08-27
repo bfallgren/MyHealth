@@ -8,10 +8,6 @@ use Illuminate\Database\Eloquent\Builder;
 
 class beWell extends Model
 {
-   public function scopeFilter(Builder $builder, $request)
-    {
-        return (new BeWellFilter($request))->filter($builder);
-    }
-
-    
+   protected $table = 'be_wells';
+       
 }

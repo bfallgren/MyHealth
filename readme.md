@@ -11,7 +11,7 @@
 
 ![GitHub Logo](/public/images/healthcare.jpg)
 
-Personal Health Record features:
+Personal Health Records:
 
 ![GitHub Logo](/public/images/MyHealth/Imaging.jpg)
 ![GitHub Logo](/public/images/MyHealth/Immunizations.jpg)

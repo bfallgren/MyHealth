@@ -15,46 +15,54 @@ class VaccineController extends Controller
 {
     public function index(Request $request)
     {
-        $currentuser = Auth::user()->name;
+        if(Auth::check()) { 
+            $currentuser = Auth::user()->id;
+            
+            $data = DB::table('vaccines')
+            ->join('patients','patients.id','vaccines.patientID')
+            ->select('vaccines.*','patients.fullName','patients.birthDate')
+            ->where('patientID','=',$currentuser)
+            ->orderBy('vDate', 'desc')
+            ->get();
+
+            if(request()->ajax()) {
+                return datatables()->of($data)
         
-        $data = DB::table('vaccines')
-        ->select('vaccines.*')
-        ->where('patientName','=',$currentuser)
-        ->orderBy('vDate', 'desc')
-        ->get();
-      
-        if(request()->ajax()) {
-            return datatables()->of($data)
-       
-        ->addColumn('clickme', function ($rows) {
-        
-        })
+                ->addColumn('clickme', function ($rows) {
+                
+                })
 
-        ->addColumn('action', function ($rows) {
-          $button = '<div class="btn-group btn-group-xs">';
-          $button .= '<a href="/vaccine/' . $rows->id . '/edit" title="Edit" ><i class="fa fa-edit" style="font-size:24px"></i></a>';
-          $button .= '<button type="button" title="Delete" name="deleteButton" id="' . $rows->id . '" class="deleteButton"><i class="fas fa-trash-alt" style="color:red"></i></button>';
-          $button .= '</div>';
-          return $button;
-      })
-      ->rawColumns(['action'])
-      ->make(true);
-
-
-    }
-
-        return view('vaccine.index'); 
+                ->addColumn('action', function ($rows) {
+                    $button = '<div class="btn-group btn-group-xs">';
+                    $button .= '<a href="/vaccine/' . $rows->id . '/edit" title="Edit" ><i class="fa fa-edit" style="font-size:24px"></i></a>';
+                    $button .= '<button type="button" title="Delete" name="deleteButton" id="' . $rows->id . '" class="deleteButton"><i class="fas fa-trash-alt" style="color:red"></i></button>';
+                    $button .= '</div>';
+                    return $button;
+                })
+                ->rawColumns(['action'])
+                ->make(true);
+            }
+            return view('vaccine.index'); 
+        }
+        else {
+            return redirect()->to('/');
+        }
     }
 
     public function create()
     {
+        if(Auth::check()) {   
      /*
             ADDED FOR DYNAMIC DROPDOWN
     */
-        $patients = DB::table('patients')
+     /*   $patients = DB::table('patients')
         ->orderby('name','asc')
-        ->pluck("name","id");
-        return view('vaccine.create',compact('patients'));
+        ->pluck("name","id"); */
+            return view('vaccine.create');
+        }
+        else {
+            return redirect()->to('/');    
+        }
     }
 
     /**
@@ -66,13 +74,13 @@ class VaccineController extends Controller
     public function store(Request $request)
     {
         $request->validate([
-        'patientName' => 'required',
         'vDate' => 'required',
         'vaccine' => 'required',
         ]);
 
         $newRec = new Vaccine();
-        $newRec->patientName = $request->get('patientName');
+        $currentuser = Auth::user()->id;
+        $newRec->patientID = $currentuser;
         $newRec->vDate = $request->get('vDate');
         $newRec->vaccine = $request->get('vaccine');
         $newRec->comments = $request->get('comments');
@@ -100,11 +108,16 @@ class VaccineController extends Controller
      */
     public function edit($id)
     {
-        $shot = Vaccine::find($id);
-        $patients = DB::table('patients')
-        ->orderby('name','asc')
-        ->pluck("name","id");
-        return view('vaccine.edit',compact('shot','id','patients'));
+        if(Auth::check()) {  
+            $shot = Vaccine::find($id);
+        /* $patients = DB::table('patients')
+            ->orderby('name','asc')
+            ->pluck("name","id"); */
+            return view('vaccine.edit',compact('shot','id'));
+        }
+        else {
+            return redirect()->to('/');    
+        }
     }
 
     /**
@@ -117,12 +130,12 @@ class VaccineController extends Controller
     public function update(Request $request, $id)
     {
          $request->validate([
-        'patientName' => 'required',
         'vDate' => 'required',
         'vaccine' => 'required',
         ]);
         $shot = Vaccine::find($id);
-        $shot->patientName = $request->get('patientName');
+        $currentuser = Auth::user()->id;
+        $shot->patientID = $currentuser;
         $shot->vDate = $request->get('vDate');
         $shot->vaccine = $request->get('vaccine');
         $shot->comments = $request->get('comments');
@@ -140,8 +153,7 @@ class VaccineController extends Controller
     {
                
         DB::table("vaccines")->delete($id);
-       // return response()->json(['success'=>"Immunization Record Deleted successfully.", 'tr'=>'tr_'.$id]);
-       return redirect('vaccine')->with('success','Immunization Record has been deleted');
+        return redirect('vaccine')->with('success','Immunization Record has been deleted');
 
     }  
 }

@@ -15,23 +15,15 @@ class CreateLabs extends Migration
     {
         Schema::create('labs', function (Blueprint $table) {
             $table->bigIncrements('id');
-            $table->string('patientName');
+            $table->integer('patientID');
             $table->date('testDate');
-            $table->string('component');
+            $table->string('component',24);
             $table->float('measuredValue',6,2);
-            $table->string('goodRange')->nullable();
-            $table->string('comments')->nullable();
+            $table->string('goodRange',24)->nullable();
+            $table->string('comments',512)->nullable();
             $table->timestamps();
         });
-
-     Schema::table('labs', function ($table) {
-        DB::statement('ALTER TABLE labs MODIFY COLUMN patientName VARCHAR(32)');
-        DB::statement('ALTER TABLE labs MODIFY COLUMN component VARCHAR(24)');
-        DB::statement('ALTER TABLE labs MODIFY COLUMN goodRange VARCHAR(24)');
-        DB::statement('ALTER TABLE labs MODIFY COLUMN comments VARCHAR(512)');
-         DB::statement('ALTER TABLE labs MODIFY COLUMN measuredValue FLOAT(6,2)');
-      
-        }); 
+       
     }
 
     /**

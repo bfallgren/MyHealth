@@ -15,27 +15,18 @@ class CreateBeWellsTable extends Migration
     {
         Schema::create('be_wells', function (Blueprint $table) {
             $table->bigIncrements('id');
-            $table->string('patientName');
+            $table->integer('patientID');
             $table->date('apptDate');
-            $table->string('doctorName');
-            $table->string('doctorSpecialty');
+            $table->string('doctorName',32);
+            $table->string('doctorSpecialty',24);
             $table->integer('fee')->nullable();
-            $table->string('reason')->nullable();
-            $table->string('diagnosis')->nullable();
+            $table->string('reason',80)->nullable();
+            $table->string('diagnosis',512)->nullable();
             $table->integer('vitalsWeight')->nullable();
-            $table->string('vitalsBP')->nullable();
+            $table->string('vitalsBP',16)->nullable();
             $table->timestamps();
         });
-        Schema::table('be_wells', function ($table) {
-            DB::statement('ALTER TABLE be_wells MODIFY COLUMN patientName VARCHAR(32)');
-            DB::statement('ALTER TABLE be_wells MODIFY COLUMN doctorName VARCHAR(32)');
-            DB::statement('ALTER TABLE be_wells MODIFY COLUMN doctorSpecialty VARCHAR(24)');
-            DB::statement('ALTER TABLE be_wells MODIFY COLUMN reason VARCHAR(80)');
-            DB::statement('ALTER TABLE be_wells MODIFY COLUMN diagnosis VARCHAR(512)');
-            DB::statement('ALTER TABLE be_wells MODIFY COLUMN vitalsBP VARCHAR(16)');
-      
-        }); 
-
+       
     }
 
     /**

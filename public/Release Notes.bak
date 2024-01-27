@@ -1,0 +1,98 @@
+Release Notes<br><br>
+
+Version 6.0 {Laravel 7.30; php 7.4} <br><br>
+--  Added Lab Templates for bulk insert of Lab records (introduced SweetAlert)<br>
+<br>
+Version 5.1 {Laravel 7.30; php 7.4} (commit 20230827)<br>
+--  Added abnormal flag in newlab index blade view<br>
+--  Added auth:check for session timeout, to index, create & edit function in all controllers<br>
+--  Added patient detail to patient model (fullname, birthdate, insurance, memberid) -<br>
+--       migrate db first<br>
+--  Added fullname and birthdate to print and pdf functions in affected modules - wellness, imaging,<br>
+--      meds, vaccines, labs, surgeries<br>
+--  Added location, hospital, active (flag), doctorRating, staffRating, services to Doctor model -<br>
+--      migrate db first<br>
+--  updated help function in app.blade view<br>
+--  Replaced patient name with patient ID in all models and applied to controllers/views<br>
+--  Convert PatientID to numeric value<br>
+--  Restrict profile results to authenticated users<br>
+--  Removed app/filter modules (using datatables)<br>
+--  turned off search/paging feature for Patient index view<br>
+--  Upgraded to Laravel v7<br>
+<br>
+ToDo:<br>
+--  increase medicine.notes field from 80 to 255<br>
+<br>
+<br>
+Version 4.2 (commit 20220331)<br>
+-- Added Authentication to filter rows for current user<br>
+<br>
+<br>
+Version 4.1<br>
+-- Converted to Datatables<br>
+-- Deleted Labtests table and updated Migration<br>
+-- todo: fix getSpecs (imaging, surgery, wellness)<br>
+<br>
+Version 4<br>
+-- Add comments to Family History table<br>
+-- Add version to About menu item<br>
+-- Standardize Pagination<br>
+-- Fix pagination link color<br>
+-- clean up css<br>
+-- added popovers<br>
+<br>
+Version 3 (commit 20200310)<br>
+--  Menu Updates (and associated MVCs):<br>
+--	Removed Reports<br>
+--	Added Top Menu (Profile, health records)<br>
+--	Added profile menu item 'family history'<br>
+--	Added health records menu items 'imaging', 'immunization', 'medications'<br>
+--  Added text search and column sorting to Lab and Immunization views<br>
+--  Removed BP and weight from Surgery views<br>
+--  Improved field edits<br>
+<br>
+version 2.2 (commit 20191123)<br>
+<br>
+-- Reformatted home/welcome page and added centerPage style sheet<br>
+-- Fixed topPage style sheet<br>
+-- Iconized views and menus<br>
+-- widened doctor and doctor specialty fields<br>
+-- Weight and fee are now required fields<br>
+-- Changed title to MyHealth<br>
+-- Widened specialty field to 120px<br>
+-- Limit Paginatuion links - onEachSide(1)<br>
+<br>
+Work-In-Progress<br>
+<br>
+--  multi-column search and column sort functionality<br>
+--  family history<br>
+--  immunizations<br>
+--  medications<br>
+<br>
+<br>
+Version 2.1 (commit 20191031)<br>
+<br>
+-- Added Doctor Specialty auto-populate<br>
+-- Added Menu to home page<br>
+-- Sort and Paginate Doctors/Patients<br>
+-- Updated app.css style sheet<br>
+-- Remove ID display from Index views<br>
+-- change Lab Index view to filter on component<br>
+-- Changed filter in Wellness and Surgery Index view: label change to filter by doctor and query changed to 'like'<br>
+-- Changed .env MySql section to 'charset' => 'utf8' and 'collation' => 'utf8_unicode_ci'<br>
+-- Changed div class (id=app) in app.blade.php to container-fluid<br>
+-- Sort by Date for Wellness, Lab and Surgery Index views<br>
+-- Added 'records per page' for Wellness, Lab & Surgery (default 5)<br>
+<br>
+Version 2 (commit 20190812)<br>
+-- Fix testDate field in db<br>
+-- Fix measuredValue field in db<br>
+-- Set limit on input field size<br>
+-- Changed measuredValue in db to Float(6,2)<br>
+-- Added Create view edits for weight and value<br>
+-- ReSize db<br>
+-- Edit views: add dropdown for patientName/doctorName<br>
+-- Index views: add scrollable text box<br>
+<br>
+Version 1 (initial)<br>
+<br>

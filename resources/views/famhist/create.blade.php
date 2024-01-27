@@ -26,15 +26,7 @@
       
       <form method="post" action="{{url('fam')}}" enctype="multipart/form-data">
         @csrf
-        <div class="form-group col-md-4">                 
-             <label for="patient">Patient:</label>
-            <select name="patient" class="form-control">
-              <option value="">--Select Patient--</option>
-                @foreach ($patients as $patients => $value)
-                  <option > {{ $value }}</option>   
-                @endforeach
-            </select>
-          </div>
+        
           <div class="form-group col-md-3">
               <label for="familyMember">Family Member:</label>
               <input type="text" size="16" maxlength="16" class="form-control" name="familyMember">
@@ -51,7 +43,7 @@
             <label for="comments">Comments:</label>
             <textarea type="text" size="80" maxlength="256" class="form-control" name="comments"></textarea>
           </div>   
-        </div>
+        
         <div class="row">
             <div class="form-group col-md-4" style="margin-top:10px">
                 <button type="submit" class="btn btn-success">Submit</button>

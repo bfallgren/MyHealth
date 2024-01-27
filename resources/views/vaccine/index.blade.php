@@ -35,10 +35,8 @@
         <table class="row-border table" id="datatable-crud">
           <thead style=color:red>
             <tr>
-              <th>Patient</th>
               <th>Vaccine Date</th>
               <th>Vaccine</th>
-              <th>Comments</th>
               <th>Comments</th>
               <th>Action</th>
             </tr>
@@ -118,31 +116,45 @@
               {
                   extend: 'copy',
                   exportOptions: {
-                      columns: [ 1, 2, 3] //Your Column value those you want
+                      columns: [ 0, 1, 2] //Your Column value those you want
                   }
               },
               {
                   extend: 'csv',
                   exportOptions: {
-                    columns: [ 1, 2, 3] //Your Column value those you want
+                    columns: [ 0, 1, 2] //Your Column value those you want
                   }
               },
               {
                   extend: 'excel',
                   exportOptions: {
-                    columns: [ 1, 2, 3] //Your Column value those you want
+                    columns: [ 0, 1, 2] //Your Column value those you want
                   }
               },
               {
                   extend: 'pdf',
+                  title: "Vaccines",
+                  messageTop: function() {
+                    var fullNameCol = $('#datatable-crud').dataTable().api().cell(0, 4).data();
+                    var birthDateCol = $('#datatable-crud').dataTable().api().cell(0, 5).data();
+                    
+                    return "Patient: " + fullNameCol + " , D-O-B: " + birthDateCol;
+                  },
                   exportOptions: {
-                    columns: [ 1, 2, 3] //Your Column value those you want
+                    columns: [ 0, 1, 2] //Your Column value those you want
                   }
               },
               {
                   extend: 'print',
+                  title: "Vaccines",
+                  messageBottom: function() {
+                    var fullNameCol = $('#datatable-crud').dataTable().api().cell(0, 4).data();
+                    var birthDateCol = $('#datatable-crud').dataTable().api().cell(0, 5).data();
+                    
+                    return "Patient: " + fullNameCol + " , D-O-B: " + birthDateCol;
+                  },
                   exportOptions: {
-                    columns: [ 1, 2, 3] //Your Column value those you want
+                    columns: [ 0, 1, 2] //Your Column value those you want
                   }
               },
              
@@ -150,27 +162,24 @@
            ajax: "{{ url('vaccine') }}",
            columns: [
                                         
-              { data: 'patientName', name: 'patientName'},
               { data: 'vDate', name: 'vDate' },
               { data: 'vaccine', name: 'Vaccine'},      
-              { data: 'comments', name: 'comments' },
-              { data: 'clickme', name: 'clickme',  "className": "comments-class", orderable: false},
+              { data: 'comments', name: 'comments', orderable: false },
               { data: 'action', name: 'action', orderable: false},
+              { data: 'fullName', name: 'fullName', orderable: false},
+              { data: 'birthDate', name: 'birthDate', orderable: false},
             ],
 
             columnDefs: [
                   
-                    { "targets": 0, "width":"15%"},
-                    { "targets": 1, "width":"15%"},
-                    { "targets": 2, "width":"35%"},
-                    { "targets": 4, width:"10%",
-                      "render": function (data, type, col, meta) {
-                         return type === 'display'? '<i class="fa fa-glasses"></i>' : data;
-                      }     
-                    },
-                    { "targets": 3, "visible":false}                    
-                    
-                  ],
+              { "targets": 0, "width":"15%"},
+              { "targets": 1, "width":"25%"},
+              { "targets": 2, "width":"50%"},
+              { "targets": 3, "width":"10%"} ,
+              { "targets": 4, "visible":false},   
+              { "targets": 5, "visible":false}                      
+              
+            ],
 
           order: [[0, 'desc']]
 

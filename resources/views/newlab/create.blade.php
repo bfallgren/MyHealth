@@ -1,6 +1,6 @@
 <!-- create.blade.php -->
 @extends('layouts.app')
-@section('content') 
+@section('content')
 <!DOCTYPE html>
 <html>
   <head>
@@ -27,50 +27,35 @@
       <form method="post" action="{{url('lab')}}" enctype="multipart/form-data">
         @csrf
         <div class="row">
-          <div class="col-md-12"></div>
-           
-          <div class="form-group col-md-4">                 
-             <label for="patientName">Patient:</label>
-            <select name="patientName" class="form-control">
-              <option value="">--Select Patient--</option>
-                @foreach ($patients as $patients => $value)
-                  <option > {{ $value }}</option>   
-                @endforeach
-            </select>
+          <div class="col-md-12">
+            <div class="form-group col-md-4">
+              <label for="testDate">Date of Test:</label>
+              <input type="date" class="form-control" name="testDate">
+            </div>
+            <div class="form-group col-md-4">
+              <label for="component">Component:</label>
+              <input type="text" size="24" maxlength="24" class="form-control" name="component">
+            </div>
+            <div class="form-group col-md-4">
+              <label for="measuredValue">Value:</label>
+              <input type="text" class="form-control" name="measuredValue">
+            </div>
+            <div class="form-group col-md-4">
+              <label for="goodRange">Good Range:</label>
+              <input type="text" size="24" maxlength="24" class="form-control" name="goodRange">
+            </div>
+            <div class="form-group col-md-4">
+              <label for="comments">Comments:</label>
+              <textarea type="text" size="80" maxlength="512" class="form-control" name="comments"></textarea>
+            </div>
           </div>
-
-          <div class="form-group col-md-4">
-            <label for="testDate">Date of Test:</label>
-            <input type="date" class="form-control" name="testDate">
-          </div>
-
-          <div class="form-group col-md-4">
-            <label for="component">Component:</label>
-            <input type="text" size="24" maxlength="24" class="form-control" name="component">
-          </div>
-
-          <div class="form-group col-md-4">
-            <label for="measuredValue">Value:</label>
-            <input type="text" class="form-control" name="measuredValue">
-          </div>
-
-          <div class="form-group col-md-4">
-            <label for="goodRange">Good Range:</label>
-            <input type="text" size="24" maxlength="24" class="form-control" name="goodRange">
-          </div>
-
-          <div class="form-group col-md-4">
-            <label for="comments">Comments:</label>
-            <textarea type="text" size="80" maxlength="512" class="form-control" name="comments"></textarea>
-          </div>
-         
         </div>
-        
         <div class="row">
-          <div class="col-md-12"></div>
-          <div class="form-group col-md-4" style="margin-top:10px">
-            <button type="submit" class="btn btn-success">Submit</button>
-            <a href="/lab" class="btn btn-warning">Cancel</a>
+          <div class="col-md-12">
+            <div class="form-group col-md-4" >
+              <button type="submit" class="btn btn-success">Submit</button>
+                <a href="/lab" class="btn btn-warning">Cancel</a>
+            </div>
           </div>
         </div>
       </form>

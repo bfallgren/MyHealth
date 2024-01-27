@@ -35,7 +35,10 @@
         <table class="row-border table" id="datatable-crud">
           <thead style=color:red>
             <tr>
-              <th>Name</th>
+              <th>Full Name</th>
+              <th>Birth</th>
+              <th>Pri. Ins.</th>
+              <th>Ins. Member ID</th>
               <th>Primary Doctor</th>
               <th>Action</th>
             </tr>
@@ -83,17 +86,18 @@
            ajax: "{{ url('patient') }}",
            columns: [
                   
-                    { data: 'name', name: 'name' },
+                    { data: 'fullName', name: 'fullName' },
+                    { data: 'birthDate', name: 'birthDate' },
+                    { data: 'insurance', name: 'insurance' },
+                    { data: 'memberID', name: 'memberID' },
                     { data: 'primaryDoctor', name: 'primaryDoctor' },
                   
                     {data: 'action', name: 'action', orderable: false},
                  ],
 
                  columnDefs: [
-                 
-                    { "targets": 0, "width":"45%"},
-                    { "targets": 1, "width":"45%"},
-                    { "targets": 2, "width":"10%"}
+                              
+                    { "targets": 5, "width":"10%"}
                      
                   ],
 

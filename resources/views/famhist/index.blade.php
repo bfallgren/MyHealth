@@ -36,7 +36,6 @@
           <thead style=color:red>
             <tr>
            
-              <th>Patient</th>
               <th>Family Member</th>
               <th>Relation</th>
               <th>Symptoms</th>
@@ -91,31 +90,31 @@
               {
                   extend: 'copy',
                   exportOptions: {
-                      columns: [ 0, 1, 2, 3, 4] //Your Column value those you want
+                      columns: [ 0, 1, 2, 3] //Your Column value those you want
                   }
               },
               {
                   extend: 'csv',
                   exportOptions: {
-                    columns: [ 0, 1, 2, 3, 4] //Your Column value those you want
+                    columns: [ 0, 1, 2, 3] //Your Column value those you want
                   }
               },
               {
                   extend: 'excel',
                   exportOptions: {
-                    columns: [ 0, 1, 2, 3, 4] //Your Column value those you want
+                    columns: [ 0, 1, 2, 3] //Your Column value those you want
                   }
               },
               {
                   extend: 'pdf',
                   exportOptions: {
-                    columns: [ 0, 1, 2, 3, 4] //Your Column value those you want
+                    columns: [ 0, 1, 2, 3] //Your Column value those you want
                   }
               },
               {
                   extend: 'print',
                   exportOptions: {
-                    columns: [ 0, 1, 2, 3, 4] //Your Column value those you want
+                    columns: [ 0, 1, 2, 3] //Your Column value those you want
                   }
               },
              
@@ -124,7 +123,6 @@
            ajax: "{{ url('fam') }}",
            columns: [
                    
-                    { data: 'patient', name: 'patient' },
                     { data: 'familyMember', name: 'familyMember' },
                     { data: 'relation', name: 'relation' },
                     { data: 'symptoms', name: 'symptoms', orderable: false },
@@ -133,18 +131,17 @@
                  ],
                  columnDefs: [
                     
-                    { "targets": 0, "width":"10%"},
-                    { "targets": 1, "width":"10%"},
-                    { "targets": 2, "width":"10%"},
-                    { "targets": 3, "width":"28%"},
-                    { "targets": 4, "width":"30%"},
-                    { "targets": 5, "width":"12%"}             
+                    { "targets": 0, "width":"15%"},
+                    { "targets": 1, "width":"15%"},
+                    { "targets": 2, "width":"25%"},
+                    { "targets": 3, "width":"30%"},
+                    { "targets": 4, "width":"15%"}          
                     
                   ],
 
          
 
-                 order: [[0, 'desc']]
+                 order: [[0, 'asc']]
               
       });
      

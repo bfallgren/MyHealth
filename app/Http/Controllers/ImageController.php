@@ -19,31 +19,36 @@ class ImageController extends Controller
      */
     public function index(Request $request)
     {
-        $currentuser = Auth::user()->name;
+        if(Auth::check()) { 
+            $currentuser = Auth::user()->id;
+           
+            $data = DB::table('images')
+            ->join('patients','patients.id','images.patientID')
+            ->select('images.*','patients.fullName','patients.birthDate')
+            ->where('patientID','=',$currentuser)
+            ->orderBy('apptDate', 'desc')
+            ->get();
         
-        $data = DB::table('images')
-        ->select('images.*')
-        ->where('patientName','=',$currentuser)
-        ->orderBy('apptDate', 'desc')
-        ->get();
-      
-        if(request()->ajax()) {
-            return datatables()->of($data)
-       
-        ->addColumn('action', function ($rows) {
-          $button = '<div class="btn-group btn-group-xs">';
-          $button .= '<a href="/imaging/' . $rows->id . '/edit" title="Edit" ><i class="fa fa-edit" style="font-size:24px"></i></a>';
-          $button .= '<button type="button" title="Delete" name="deleteButton" id="' . $rows->id . '" class="deleteButton"><i class="fas fa-trash-alt" style="color:red"></i></button>';
-          $button .= '</div>';
-          return $button;
-      })
-      ->rawColumns(['action'])
-      ->make(true);
+            if(request()->ajax()) {
+                return datatables()->of($data)
+        
+                ->addColumn('action', function ($rows) {
+                    $button = '<div class="btn-group btn-group-xs">';
+                    $button .= '<a href="/imaging/' . $rows->id . '/edit" title="Edit" ><i class="fa fa-edit" style="font-size:24px"></i></a>';
+                    $button .= '<button type="button" title="Delete" name="deleteButton" id="' . $rows->id . '" class="deleteButton"><i class="fas fa-trash-alt" style="color:red"></i></button>';
+                    $button .= '</div>';
+                    return $button;
+                })
+                ->rawColumns(['action'])
+                ->make(true);
+            }
 
-
-    }
-
-        return view('imaging.index'); 
+            return view('imaging.index'); 
+        }
+        else 
+        {
+            return redirect()->to('/');
+        }
     }
     /**
      * Show the form for creating a new resource.
@@ -52,19 +57,24 @@ class ImageController extends Controller
      */
     public function create()
     {
+        if(Auth::check()) {  
      /*
             ADDED FOR DYNAMIC DROPDOWN
     */
-        $patients = DB::table('patients')
-        ->orderby('name','asc')
-        ->pluck("name","id");
-        $doctors = DB::table('doctors')
-        ->orderby('name','asc')
-        ->pluck("name","id");
-        $specialty = DB::table('doctors')
-        ->orderby('specialty','asc')
-        ->pluck("specialty","id");
-        return view('imaging.create',compact('patients','doctors','specialty'));
+       
+            $currentuser = Auth::user()->id;
+            $doctors = DB::table('doctors')
+            ->where('patientID','=',$currentuser)
+            ->orderby('name','asc')
+            ->pluck("name","id");
+            $specialty = DB::table('doctors')
+            ->orderby('specialty','asc')
+            ->pluck("specialty","id");
+            return view('imaging.create',compact('doctors','specialty'));
+        }
+        else {
+            return redirect()->to('/');    
+        }
     }
 
     /**
@@ -76,7 +86,6 @@ class ImageController extends Controller
     public function store(Request $request)
     {
         $request->validate([
-        'patientName' => 'required',
         'apptDate' => 'required',
         'doctorName' => 'required',
         'doctorSpecialty' => 'required',
@@ -84,7 +93,8 @@ class ImageController extends Controller
 ]);
 
         $newRec = new Image();
-        $newRec->patientName = $request->get('patientName');
+        $currentuser = Auth::user()->id;
+        $newRec->patientID = $currentuser;
         $newRec->apptDate = $request->get('apptDate');
         $newRec->doctorName = $request->get('doctorName');
         $newRec->doctorSpecialty = $request->get('drSpec');
@@ -115,17 +125,21 @@ class ImageController extends Controller
      */
     public function edit($id)
     {
-        $img = Image::find($id);
-        $patients = DB::table('patients')
-        ->orderby('name','asc')
-        ->pluck("name","id");
-        $doctors = DB::table('doctors')
-        ->orderby('name','asc')
-        ->pluck("name","id");
-        $specialty = DB::table('doctors')
-        ->orderby('specialty','asc')
-        ->pluck("specialty","id");
-        return view('imaging.edit',compact('img','id','patients','doctors','specialty'));
+        if(Auth::check()) {   
+            $img = Image::find($id);
+            $currentuser = Auth::user()->id;
+            $doctors = DB::table('doctors')
+            ->where('patientID','=',$currentuser)
+            ->orderby('name','asc')
+            ->pluck("name","id");
+            $specialty = DB::table('doctors')
+            ->orderby('specialty','asc')
+            ->pluck("specialty","id");
+            return view('imaging.edit',compact('img','id','doctors','specialty'));
+        }
+        else {
+            return redirect()->to('/');    
+        }
     }
 
     /**
@@ -138,14 +152,14 @@ class ImageController extends Controller
     public function update(Request $request, $id)
     {
          $request->validate([
-        'patientName' => 'required',
         'apptDate' => 'required',
         'doctorName' => 'required',
         'doctorSpecialty' => 'required',
         'fee' => 'numeric',
 ]);
         $img= Image::find($id);
-        $img->patientName = $request->get('patientName');
+        $currentuser = Auth::user()->id;
+        $img->patientID = $currentuser;
         $img->apptDate = $request->get('apptDate');
         $img->doctorName = $request->get('doctorName');
         $img->doctorSpecialty = $request->get('drSpec');
@@ -164,11 +178,6 @@ class ImageController extends Controller
      */
     public function destroy($id)
     {
-        //$img = Blog::find($id);
-        //dd($id);
-        //$img->delete($id);
-        //return redirect('blogs')->with('success','Blog Has Been Deleted');
-       
         DB::table("images")->delete($id);
         return response()->json(['success'=>"Imaging Deleted successfully.", 'tr'=>'tr_'.$id]);
 

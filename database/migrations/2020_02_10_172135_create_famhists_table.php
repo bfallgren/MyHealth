@@ -15,21 +15,13 @@ class CreateFamhistsTable extends Migration
     {
         Schema::create('famhists', function (Blueprint $table) {
             $table->bigIncrements('id');
-            $table->string('patient');
-            $table->string('familyMember');
-            $table->string('relation');
-            $table->integer('symptoms');
+            $table->integer('patientID');
+            $table->string('familyMember',16);
+            $table->string('relation',16);
+            $table->string('symptoms',256);
+            $table->string('comments',256)->nullable();
             $table->timestamps();
         });
-
-     Schema::table('famhists', function ($table) {
-            DB::statement('ALTER TABLE famhists MODIFY COLUMN patient VARCHAR(16)');
-            DB::statement('ALTER TABLE famhists MODIFY COLUMN familyMember VARCHAR(16)');
-            DB::statement('ALTER TABLE famhists MODIFY COLUMN relation VARCHAR(16)');
-            DB::statement('ALTER TABLE famhists MODIFY COLUMN symptoms VARCHAR(256)');
-                        
-      
-        }); 
     }
 
        

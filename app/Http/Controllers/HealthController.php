@@ -19,31 +19,36 @@ class HealthController extends Controller
      */
     public function index(Request $request)
     {
-        $currentuser = Auth::user()->name;
-        
-        $data = DB::table('be_wells')
-        ->select('be_wells.*')
-        ->where('patientName','=',$currentuser)
-        ->orderBy('apptDate', 'desc')
-        ->get();
-      
-        if(request()->ajax()) {
-            return datatables()->of($data)
-       
-        ->addColumn('action', function ($rows) {
-          $button = '<div class="btn-group btn-group-xs">';
-          $button .= '<a href="/myHealth/' . $rows->id .  '/edit" title="Edit" ><i class="fa fa-edit" style="font-size:24px"></i></a>';
-          $button .= '<button type="button" title="Delete" name="deleteButton" id="' . $rows->id . '" class="deleteButton"><i class="fas fa-trash-alt" style="color:red"></i></button>';
-          $button .= '</div>';
-          return $button;
-      })
-      ->rawColumns(['action'])
-      ->make(true);
+        if(Auth::check()) { 
+                $currentuser = Auth::user()->name;
+                $currentuserid = Auth::user()->id;
+               
+                $data = DB::table('be_wells')
+                ->join('patients','patients.id','be_wells.patientID')
+                ->select('be_wells.*','patients.fullName','patients.birthDate')
+                ->where('patientID','=',$currentuserid)
+                ->orderBy('apptDate', 'desc')
+                ->get();
+            
+                if(request()->ajax()) {
+                    return datatables()->of($data)
+            
+                    ->addColumn('action', function ($rows) {
+                        $button = '<div class="btn-group btn-group-xs">';
+                        $button .= '<a href="/myHealth/' . $rows->id .  '/edit" title="Edit" ><i class="fa fa-edit" style="font-size:24px"></i></a>';
+                        $button .= '<button type="button" title="Delete" name="deleteButton" id="' . $rows->id . '" class="deleteButton"><i class="fas fa-trash-alt" style="color:red"></i></button>';
+                        $button .= '</div>';
+                        return $button;
+                    })
+                    ->rawColumns(['action'])
+                    ->make(true);
 
-
-    }
-
-        return view('bewell.index'); 
+                }
+                return view('bewell.index');
+        }
+        else {
+            return redirect()->to('/');
+        } 
     }
 
     /**
@@ -53,19 +58,23 @@ class HealthController extends Controller
      */
     public function create()
     {
+        if(Auth::check()) {  
      /*
             ADDED FOR DYNAMIC DROPDOWN
     */
-        $patients = DB::table('patients')
-        ->orderby('name','asc')
-        ->pluck("name","id");
-        $doctors = DB::table('doctors')
-        ->orderby('name','asc')
-        ->pluck("name","id");
-        $specialty = DB::table('doctors')
-        ->orderby('specialty','asc')
-        ->pluck("specialty","id");
-        return view('bewell.create',compact('patients','doctors','specialty'));
+            $currentuser = Auth::user()->id;
+            $doctors = DB::table('doctors')
+            ->where('patientID','=',$currentuser)
+            ->orderby('name','asc')
+            ->pluck("name","id");
+            $specialty = DB::table('doctors')
+            ->orderby('specialty','asc')
+            ->pluck("specialty","id");
+            return view('bewell.create',compact('doctors','specialty'));
+        }
+        else {
+            return redirect()->to('/');    
+        }
     }
 
     /**
@@ -77,7 +86,6 @@ class HealthController extends Controller
     public function store(Request $request)
     {
         $request->validate([
-        'patientName' => 'required',
         'apptDate' => 'required',
         'doctorName' => 'required',
         'doctorSpecialty' => 'required',
@@ -85,7 +93,8 @@ class HealthController extends Controller
          'vitalsWeight' => 'numeric',
         ]);
         $newRec = new beWell();
-        $newRec->patientName = $request->get('patientName');
+        $currentuser = Auth::user()->id;
+        $newRec->patientID = $currentuser;
         $newRec->apptDate = $request->get('apptDate');
         $newRec->doctorName = $request->get('doctorName');
         $newRec->doctorSpecialty = $request->get('drSpec');
@@ -118,17 +127,24 @@ class HealthController extends Controller
      */
     public function edit($id)
     {
-        $appt = beWell::find($id);
-        $patients = DB::table('patients')
-        ->orderby('name','asc')
-        ->pluck("name","id");
-        $doctors = DB::table('doctors')
-        ->orderby('name','asc')
-        ->pluck("name","id");
-        $specialty = DB::table('doctors')
-        ->orderby('specialty','asc')
-        ->pluck("specialty","id");
-        return view('bewell.edit',compact('appt','id','patients','doctors','specialty'));
+        if(Auth::check()) {   
+            $appt = beWell::find($id);
+            $patients = DB::table('patients')
+            ->orderby('name','asc')
+            ->pluck("name","id");
+            $currentuser = Auth::user()->id;
+            $doctors = DB::table('doctors')
+            ->where('patientID','=',$currentuser)
+            ->orderby('name','asc')
+            ->pluck("name","id");
+            $specialty = DB::table('doctors')
+            ->orderby('specialty','asc')
+            ->pluck("specialty","id");
+            return view('bewell.edit',compact('appt','id','patients','doctors','specialty'));
+        }
+        else {
+            return redirect()->to('/');    
+        }
     }
 
     /**
@@ -141,7 +157,6 @@ class HealthController extends Controller
     public function update(Request $request, $id)
     {
         $request->validate([
-        'patientName' => 'required',
         'apptDate' => 'required',
         'doctorName' => 'required',
         'doctorSpecialty' => 'required',
@@ -149,7 +164,8 @@ class HealthController extends Controller
         'vitalsWeight' => 'numeric',
         ]);
         $appt= beWell::find($id);
-        $appt->patientName = $request->get('patientName');
+        $currentuser = Auth::user()->id;
+        $appt->patientID = $currentuser;
         $appt->apptDate = $request->get('apptDate');
         $appt->doctorName = $request->get('doctorName');
         $appt->doctorSpecialty = $request->get('drSpec');

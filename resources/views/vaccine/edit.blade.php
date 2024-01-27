@@ -27,29 +27,20 @@
         <input name="_method" type="hidden" value="PATCH">
         <div class="row">
           <div class="col-md-12"></div>
-          <div class="form-group col-md-4">
-            <label for="PatientName">Patient:</label>
-            <select name="patientName" class="form-control">
-              <option value="{{$shot->patientName}}">{{$shot->patientName}}</option>
-                @foreach ($patients as $patients => $value)
-                  <option > {{ $value }}</option>   
-                @endforeach
-            </select>
-          </div>
-          <div class="form-group col-md-4">
-            <label for="vDate">Date of Vaccine:</label>
-            <input type="date" class="form-control" name="vDate" value="{{$shot->vDate}}">
-          </div>
-          <div class="form-group col-md-4">
-            <label for="vaccine">Vaccine:</label>
-            <input type="text" size="24" maxlength="24" class="form-control" name="vaccine" value="{{$shot->vaccine}}">
-          </div>
-          <div class="form-group col-md-4">
-            <label for="comments">Comments:</label>
-            <textarea type="text" size="80" maxlength="512" class="form-control" name="comments">{{$shot->comments}}</textarea>
+            <div class="form-group col-md-4">
+              <label for="vDate">Date of Vaccine:</label>
+              <input type="date" class="form-control" name="vDate" value="{{$shot->vDate}}">
+            </div>
+            <div class="form-group col-md-4">
+              <label for="vaccine">Vaccine:</label>
+              <input type="text" size="24" maxlength="24" class="form-control" name="vaccine" value="{{$shot->vaccine}}">
+            </div>
+            <div class="form-group col-md-4">
+              <label for="comments">Comments:</label>
+              <textarea type="text" size="80" maxlength="512" class="form-control" name="comments">{{$shot->comments}}</textarea>
+            </div>
           </div>
           
-        </div>
         <div class="row">
           <div class="col-md-12"></div>
           <div class="form-group col-md-12" style="margin-top:10px">

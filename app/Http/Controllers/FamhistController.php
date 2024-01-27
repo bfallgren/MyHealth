@@ -8,7 +8,7 @@ use Illuminate\Support\Facades\DB;
 use App\Http\Controllers\Controller;
 use Illuminate\Pagination\Paginator;
 use Illuminate\Pagination\LengthAwarePaginator;
-
+Use Auth;
 class FamhistController extends Controller
 {
     /**
@@ -20,23 +20,31 @@ class FamhistController extends Controller
    
     public function index(Request $request)
     {
-      if(request()->ajax()) {
-        return datatables()->of(Famhist::select('*'))
-       
-        ->addColumn('action', function ($rows) {
-          $button = '<div class="btn-group btn-group-xs">';
-          $button .= '<a href="/fam/' . $rows->id . '/edit" title="Edit" ><i class="fa fa-edit" style="font-size:24px"></i></a>';
-          $button .= '<button type="button" title="Delete" name="deleteButton" id="' . $rows->id . '" class="deleteButton"><i class="fas fa-trash-alt" style="color:red"></i></button>';
-          $button .= '</div>';
-          return $button;
-      })
-      ->rawColumns(['action'])
-      ->make(true);
+      if(Auth::check()) { 
+        $currentuser = Auth::user()->id;
+        $data = DB::table('famhists')
+            ->where('patientID','=',$currentuser)
+            ->get();
+          if(request()->ajax()) {
+            return datatables()->of($data)  
+            ->addColumn('action', function ($rows) {
+              $button = '<div class="btn-group btn-group-xs">';
+              $button .= '<a href="/fam/' . $rows->id . '/edit" title="Edit" ><i class="fa fa-edit" style="font-size:24px"></i></a>';
+              $button .= '<button type="button" title="Delete" name="deleteButton" id="' . $rows->id . '" class="deleteButton"><i class="fas fa-trash-alt" style="color:red"></i></button>';
+              $button .= '</div>';
+              return $button;
+          })
+          ->rawColumns(['action'])
+          ->make(true);
 
 
-    }
+        }
 
-        return view('famhist.index'); 
+            return view('famhist.index'); 
+      }
+      else {
+        return redirect()->to('/');
+      }
     }
    
    
@@ -47,11 +55,12 @@ class FamhistController extends Controller
      */
     public function create()
     {
-             
-        $patients = DB::table('patients')
-        ->orderby('name','asc')
-        ->pluck("name","id");
-        return view('famhist.create',compact('patients'));
+        if(Auth::check()) {   
+          return view('famhist.create');
+        }
+        else {
+          return redirect()->to('/');
+        } 
     }
 
     /**
@@ -63,12 +72,12 @@ class FamhistController extends Controller
     public function store(Request $request)
     {
       $request->validate([
-        'patient' => 'required',
         'familyMember' => 'required',
         'relation' => 'required',
          ]);
       $newRec = new Famhist();
-        $newRec->patient = $request->get('patient');
+        $currentuserid = Auth::user()->id;
+        $newRec->patientID = $currentuserid;
         $newRec->familyMember = $request->get('familyMember');
         $newRec->relation = $request->get('relation');
         $newRec->symptoms = $request->get('symptoms');
@@ -97,12 +106,13 @@ class FamhistController extends Controller
      */
     public function edit($id)
     {
-        $patients = DB::table('patients')
-        ->orderby('name','asc')
-        ->pluck("name","id");
-        $fhist = Famhist::find($id);
-        
-        return view('famhist.edit',compact('fhist','id','patients'));
+        if(Auth::check()) { 
+          $fhist = Famhist::find($id);
+          return view('famhist.edit',compact('id','fhist'));
+        }
+        else {
+          return redirect()->to('/');
+        }
     }
 
     /**
@@ -116,13 +126,12 @@ class FamhistController extends Controller
     {
       
       $request->validate([
-        'patient' => 'required',
         'familyMember' => 'required',
         'relation' => 'required',
         ]);
-      $fhist= Famhist::find($id);
-        
-        $fhist->patient = $request->get('patient');
+        $fhist= Famhist::find($id);
+        $currentuserid = Auth::user()->id;
+        $fhist->patientID = $currentuserid;
         $fhist->familyMember = $request->get('familyMember');
         $fhist->relation = $request->get('relation');
         $fhist->symptoms = $request->get('symptoms');

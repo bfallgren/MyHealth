@@ -26,15 +26,7 @@
         @csrf
         <input name="_method" type="hidden" value="PATCH">
         <div class="row">
-          <div class="form-group col-md-4">
-            <label for="patient">Patient:</label>
-            <select name="patient" class="form-control">
-              <option value="{{$med->patient}}">{{$med->patient}}</option>
-                @foreach ($patients as $patients => $value)
-                  <option > {{ $value }}</option>   
-                @endforeach
-            </select>
-          </div>
+
           <div class="form-group col-md-3">
               <label for="name">Drug:</label>
               <input type="text" size="32" maxlength="32" class="form-control" name="name" value="{{$med->name}}">
@@ -49,7 +41,7 @@
           </div>
           <div class="form-group col-md-3">
             <label for="status">Status:</label>
-            <input type="text" size="40" maxlength="80" class="form-control" name="status" value="{{$med->status}}">
+            <textarea type="text" size="40" maxlength="80" class="form-control" name="status">{{$med->status}}</textarea>
           </div>
           <div class="form-group col-md-3">
             <label for="sideAffects">Side Affects:</label>
@@ -57,7 +49,7 @@
           </div>
           <div class="form-group col-md-3">
             <label for="notes">Notes:</label>
-            <input type="text" size="32" maxlength="80" class="form-control" name="notes" value="{{$med->notes}}">
+            <textarea type="text" size="32" maxlength="80" class="form-control" name="notes">{{$med->notes}}</textarea>
           </div>
         </div>
         <div class="row">

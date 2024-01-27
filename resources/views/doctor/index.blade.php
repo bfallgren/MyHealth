@@ -4,11 +4,21 @@
 <!DOCTYPE html>
 <html lang="en">
   <head>
-      <meta charset="UTF-8">
-      <title>My Health - Doctors</title>
-     
-             
+    <meta charset="UTF-8">
+    <title>My Health - Doctors</title>       
   </head>
+  <style>
+    .fa-check-circle {
+        color: green;
+        font-weight: bold;
+        font-size: 24px;
+    }
+    .fa-star {
+        color: gold;
+        font-weight: bold;
+        font-size: 10px;    
+    }
+  </style>
   <body>
   
     <div class="container mt-2">
@@ -37,6 +47,12 @@
             <tr>
               <th>Name</th>
               <th>Specialty</th>
+              <th>Location</th>
+              <th>Hospital</th>
+              <th>Active</th>
+              <th>Doc Rating</th>
+              <th>Staff Rating</th>
+              <th>Services</th>
               <th>Action</th>
             </tr>
           </thead>
@@ -122,24 +138,68 @@
                                        
                     { data: 'name', name: 'name'},
                     { data: 'specialty', name: 'specialty' },
-                  
-                    {data: 'action', name: 'action', orderable: false},
+                    { data: 'location', name: 'location' },
+                    { data: 'hospital', name: 'hospital' },
+                    { data: 'active', name: 'active' },
+                    { data: 'doctorRating', name: 'doctorRating' },
+                    { data: 'staffRating', name: 'staffRating' },
+                    { data: 'services', name: 'services' },
+                    { data: 'action', name: 'action', orderable: false},
                  ],
 
                  columnDefs: [
-                    { "targets": 0, "width":"45%"},
-                    { "targets": 1, "width":"45%"},
-                    { "targets": 2, "width":"10%"}
+                   
+                    { "targets": 4, "width":"5%",
+                        "render": function (data, type, col, meta) {
+                            
+                            if ( data == "1" )
+                                {return '<center> <i class="fas fa-check-circle fa-2xl"></i>';}
+                            else 
+                                { return ' ';}
+                        } 
+                    }, 
+                    { "targets": 5, "width":"5%",
+                        "render": function (data, type, col, meta) {
+                           if ( data > "0" )
+                            {
+                                var start = '<span class="';
+                                var mid = 'fa fa-star';
+                                var end = '"></span>';
+                                var cat = start+mid+end; 
+                                var fullrating = cat.repeat(data);
+                                //console.log("'" +fullrating+ "'");
+                                return fullrating;
+                            }
+                            else 
+                                { return ' ';}
+                        } 
+                    }, 
+                    { "targets": 6, "width":"5%",
+                        "render": function (data, type, col, meta) {
+                           if ( data > "0" )
+                            {
+                                var start = '<span class="';
+                                var mid = 'fa fa-star';
+                                var end = '"></span>';
+                                var cat = start+mid+end; 
+                                var fullrating = cat.repeat(data);
+                                //console.log("'" +fullrating+ "'");
+                                return fullrating;
+                            }
+                            else 
+                                { return ' ';}
+                        } 
+                    }, 
+                    { "targets": 8, "width":"5%"}
                      
                   ],
 
-                 order: [[0, 'desc']]
+                 order: [[0, 'asc']]
               
       });
 
     var table = $('#datatable-crud').DataTable() ; 
-    console.log('table :', table);
-
+   
     $('#datatable-crud').on('click', 'tr', function() {
     table.row(this).nodes().to$().addClass('larger-font')
     }) ;     

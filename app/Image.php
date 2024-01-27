@@ -8,8 +8,5 @@ use Illuminate\Database\Eloquent\Builder;
 
 class Image extends Model
 {
-    public function scopeFilter(Builder $builder, $request)
-    {
-        return (new ImageFilter($request))->filter($builder);
-    }
+    //
 }

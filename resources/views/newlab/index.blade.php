@@ -16,7 +16,7 @@
       <div class="row">
         <div class="col-lg-12 margin-tb">
           <div class="pull-left">
-          <h2>Labs <i class="fas fa-vials"></i></h2>
+            <h2>Labs <i class="fas fa-vials"></i></h2>
           </div>
           <div class="pull-right mb-2">
             <a class="btn btn-success" href="{{ route('lab.create') }}"> Add Labwork</a>
@@ -35,7 +35,6 @@
         <table class="row-border table" id="datatable-crud">
           <thead style=color:red>
             <tr>
-              <th>Name</th>
               <th>Test Date</th>
               <th>Component</th>
               <th>Value</th>
@@ -109,8 +108,10 @@
         'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content')
         }
       });
+      
       var table = $('#datatable-crud').DataTable({
-        
+      
+
            processing: true,
            serverSide: true,
            
@@ -120,31 +121,45 @@
               {
                   extend: 'copy',
                   exportOptions: {
-                      columns: [ 1, 2, 3, 4, 5] //Your Column value those you want
+                      columns: [ 0, 1, 2, 3, 4] //Your Column value those you want
                   }
               },
               {
                   extend: 'csv',
                   exportOptions: {
-                    columns: [ 1, 2, 3, 4, 5] //Your Column value those you want
+                    columns: [ 0, 1, 2, 3, 4] //Your Column value those you want
                   }
               },
               {
                   extend: 'excel',
                   exportOptions: {
-                    columns: [ 1, 2, 3, 4, 5] //Your Column value those you want
+                    columns: [ 0, 1, 2, 3, 4] //Your Column value those you want
                   }
               },
               {
                   extend: 'pdf',
+                  title: "Labwork",
+                  messageTop: function() {
+                    var fullNameCol = $('#datatable-crud').dataTable().api().cell(0, 7).data();
+                    var birthDateCol = $('#datatable-crud').dataTable().api().cell(0, 8).data();
+                    
+                    return "Patient: " + fullNameCol + " , D-O-B: " + birthDateCol;
+                  },
                   exportOptions: {
-                    columns: [ 1, 2, 3, 4, 5] //Your Column value those you want
+                    columns: [  0, 1, 2, 3, 4] //Your Column value those you want
                   }
               },
               {
                   extend: 'print',
+                  title: "Labwork",
+                  messageBottom: function() {
+                    var fullNameCol = $('#datatable-crud').dataTable().api().cell(0, 7).data();
+                    var birthDateCol = $('#datatable-crud').dataTable().api().cell(0, 8).data();
+                    
+                    return "Patient: " + fullNameCol + " , D-O-B: " + birthDateCol;
+                  },
                   exportOptions: {
-                    columns: [ 1, 2, 3, 4, 5] //Your Column value those you want
+                    columns: [  0, 1, 2, 3, 4] //Your Column value those you want
                   }
               },
              
@@ -153,7 +168,6 @@
            ajax: "{{ url('lab') }}",
            columns: [
                                         
-              { data: 'patientName', name: 'patientName'},
               { data: 'testDate', name: 'testDate' },
               { data: 'component', name: 'component'},      
               { data: 'measuredValue', name: 'measuredValue' },
@@ -161,25 +175,41 @@
               { data: 'comments', name: 'comments'},  
               { data: 'clickme', name: 'clickme',  "className": "comments-class", orderable: false},
               { data: 'action', name: 'action', orderable: false},
+              { data: 'fullName', name: 'fullName', orderable: false},
+              { data: 'birthDate', name: 'birthDate', orderable: false},
             ],
-
+           rowCallback: function( row, data ) {
+                       
+                        if (data.comments && data.comments.includes("abnormal")) {  
+                          $("td:eq(4)", row).css('color','red','font-weight','bold')     
+                        }
+                        else 
+                        {
+                          $("td:eq(4)", row).css('color','green','font-weight','bold')
+                        }
+                      },
+                    
             columnDefs: [
                   
                     { "targets": 0, "width":"10%"},
-                    { "targets": 1, "width":"10%"},
-                    { "targets": 2, "width":"30%"},
-                    { "targets": 3, "width":"5%", orderable: false},
-                    { "targets": 4, "width":"8%", orderable: false},
-                    { "targets": 6, width:"5%",
+                    { "targets": 1, "width":"30%"},
+                    { "targets": 2, "width":"5%", orderable: false},
+                    { "targets": 3, "width":"20%", orderable: false},
+                    { "targets": 5, "width":"5%",
                       "render": function (data, type, col, meta) {
-                         return type === 'display'? '<center> <i class="fa fa-glasses center"></i> </center>' : data;
+                        // data is null
+                        return type === 'display'? '<center>  <i class="fa fa-glasses center"></i> </center>' : data;
                       }     
                     },
-                    { "targets": 5, "visible":false}                    
+                    { "targets": 4, "visible":false} ,
+                    { "targets": 7, "visible":false},   
+                    { "targets": 8, "visible":false}    
                     
                   ],
+                  
+          
 
-          order: [[1, 'desc']]
+          order: [[0, 'desc']]
 
          
               
@@ -194,7 +224,7 @@
        
         var data = table.row($(this).parents('tr')).data(); // getting target row 
         var dataDiag = data['comments'];
-      
+       
         $("#modal_body").html(dataDiag);
         
         $('#DiagModal').modal("show");

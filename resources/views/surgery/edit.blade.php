@@ -26,60 +26,53 @@
         @csrf
         <input name="_method" type="hidden" value="PATCH">
         <div class="row">
-          <div class="col-md-12"></div>
-          <div class="form-group col-md-4">
-            <label for="PatientName">Patient:</label>
-            <select name="patientName" class="form-control">
-              <option value="{{$oper->patientName}}">{{$oper->patientName}}</option>
-                @foreach ($patients as $patients => $value)
-                  <option > {{ $value }}</option>   
-                @endforeach
-            </select>
-          </div>
-          <div class="form-group col-md-4">
-            <label for="apptDate">Date of Appt.:</label>
-            <input type="date" class="form-control" name="apptDate" value="{{$oper->apptDate}}">
-          </div>
-          <div class="form-group col-md-4">
-            <label for="doctorName">Doctor:</label>
-            <select name="doctorName" class="form-control">
-              <option value="{{$oper->doctorName}}">{{$oper->doctorName}}</option>
-                @foreach ($doctors as $doctors => $value)
-                  <option > {{ $value }}</option>   
-                @endforeach
-            </select>
-          </div>
-          <div class="form-group col-md-4">                 
-             <label for="doctorSpecialty">Specialty:</label>
-            <select name="doctorSpecialty" class="form-control">
-              <option value="{{$oper->doctorSpecialty}}">{{$oper->doctorSpecialty}}</option>
-                
-            </select>
-          </div>
-
-          <div>
-             <input type="hidden" id ="drSpec" name="drSpec">
-          </div>
-
-          <div class="form-group col-md-4">
-            <label for="fee">Fee:</label>
-            <input type="text" class="form-control" name="fee" required value="{{$oper->fee}}">
-          </div>
-          <div class="form-group col-md-4">
-            <label for="reason">Reason:</label>
-            <textarea type="text" size="80" maxlength="80" class="form-control" name="reason">{{$oper->reason}}</textarea>
-          </div>
-          <div class="form-group col-md-4">
-            <label for="diagnosis">Diagnosis:</label>
-            <textarea type="text" size="80" maxlength="512" class="form-control" name="diagnosis">{{$oper->diagnosis}}</textarea>
-          </div>
+          <div class="col-md-12">
           
+            <div class="form-group col-md-4">
+              <label for="apptDate">Date of Appt.:</label>
+              <input type="date" class="form-control" name="apptDate" value="{{$oper->apptDate}}">
+            </div>
+            <div class="form-group col-md-4">
+              <label for="doctorName">Doctor:</label>
+              <select name="doctorName" class="form-control">
+                <option value="{{$oper->doctorName}}">{{$oper->doctorName}}</option>
+                  @foreach ($doctors as $doctors => $value)
+                    <option > {{ $value }}</option>   
+                  @endforeach
+              </select>
+            </div>
+            <div class="form-group col-md-4">                 
+              <label for="doctorSpecialty">Specialty:</label>
+              <select name="doctorSpecialty" class="form-control">
+                <option value="{{$oper->doctorSpecialty}}">{{$oper->doctorSpecialty}}</option>
+                  
+              </select>
+            </div>
+
+            <div>
+              <input type="hidden" id ="drSpec" name="drSpec">
+            </div>
+
+            <div class="form-group col-md-4">
+              <label for="fee">Fee:</label>
+              <input type="text" class="form-control" name="fee" required value="{{$oper->fee}}">
+            </div>
+            <div class="form-group col-md-4">
+              <label for="reason">Reason:</label>
+              <textarea type="text" size="80" maxlength="80" class="form-control" name="reason">{{$oper->reason}}</textarea>
+            </div>
+            <div class="form-group col-md-4">
+              <label for="diagnosis">Diagnosis:</label>
+              <textarea type="text" size="80" maxlength="512" class="form-control" name="diagnosis">{{$oper->diagnosis}}</textarea>
+            </div>
+          </div>
         </div>
         <div class="row">
-          <div class="col-md-12"></div>
-          <div class="form-group col-md-12" style="margin-top:10px">
-            <button type="submit" class="btn btn-success" onClick="checkSpec()">Update</button>
-            <a href="/surgery" class="btn btn-warning">Cancel</a>
+          <div class="col-md-12">
+            <div class="form-group col-md-12" style="margin-top:10px">
+              <button type="submit" class="btn btn-success" onClick="checkSpec()">Update</button>
+              <a href="/surgery" class="btn btn-warning">Cancel</a>
+            </div>
           </div>
         </div>
       </form>

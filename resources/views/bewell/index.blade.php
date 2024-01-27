@@ -16,7 +16,7 @@
       <div class="row">
         <div class="col-lg-12 margin-tb">
           <div class="pull-left">
-          <h2>Wellness Visits  <i class="fas fa-stethoscope"></i></h2>
+            <h2>Wellness Visits  <i class="fas fa-stethoscope"></i></h2>
           </div>
           <div class="pull-right mb-2">
             <a class="btn btn-success" href="{{ route('myHealth.create') }}"> Add Wellness Visit</a>
@@ -35,13 +35,12 @@
         <table class="row-border table" id="datatable-crud">
           <thead style=color:red>
             <tr>
-              <th>Patient</th>
               <th>Appt Date</th>
               <th>Doctor</th>
               <th>Specialty</th>
               <th>Fee</th>
               <th>Reason/Diagnosis</th>
-              <th>Diagnosis</th>
+              <th> </th>
               <th>Weight</th>
               <th>BP</th>
               <th>Action</th>
@@ -122,31 +121,45 @@
               {
                   extend: 'copy',
                   exportOptions: {
-                      columns: [ 1, 2, 3, 5, 6] //Your Column value those you want
+                      columns: [ 0, 1, 2, 3, 4, 5] //Your Column value those you want
                   }
               },
               {
                   extend: 'csv',
                   exportOptions: {
-                    columns: [ 1, 2, 3, 5, 6] //Your Column value those you want
+                    columns: [  0, 1, 2, 3, 4, 5] //Your Column value those you want
                   }
               },
               {
                   extend: 'excel',
                   exportOptions: {
-                    columns: [ 1, 2, 3, 5, 6] //Your Column value those you want
+                    columns: [  0, 1, 2, 3, 4, 5] //Your Column value those you want
                   }
               },
               {
                   extend: 'pdf',
+                  title: "Wellness Activity",
+                  messageTop: function() {
+                    var fullNameCol = $('#datatable-crud').dataTable().api().cell(0, 9).data();
+                    var birthDateCol = $('#datatable-crud').dataTable().api().cell(0, 10).data();
+                    
+                    return "Patient: " + fullNameCol + " , D-O-B: " + birthDateCol;
+                  },
                   exportOptions: {
-                    columns: [  1, 2, 3, 5, 6] //Your Column value those you want
+                    columns: [0, 1, 2, 3, 4, 5] //Your Column value those you want
                   }
               },
               {
                   extend: 'print',
+                  title: "Wellness Activity",
+                  messageBottom: function() {
+                    var fullNameCol = $('#datatable-crud').dataTable().api().cell(0, 9).data();
+                    var birthDateCol = $('#datatable-crud').dataTable().api().cell(0, 10).data();
+                    
+                    return "Patient: " + fullNameCol + " , D-O-B: " + birthDateCol;
+                  },
                   exportOptions: {
-                    columns: [ 1, 2, 3, 5, 6] //Your Column value those you want
+                    columns: [  0, 1, 2, 3, 4, 5] //Your Column value those you want
                   }
               },
              
@@ -155,7 +168,6 @@
            ajax: "{{ url('myHealth') }}",
            columns: [
                                         
-              { data: 'patientName', name: 'patientName'},
               { data: 'apptDate', name: 'apptDate' },
               { data: 'doctorName', name: 'doctorName'},      
               { data: 'doctorSpecialty', name: 'doctorSpecialty' },
@@ -169,22 +181,26 @@
               { data: 'vitalsWeight', name: 'vitalsWeight',orderable: false }, 
               { data: 'vitalsBP', name: 'vitalsBP',orderable: false }, 
               { data: 'action', name: 'action', orderable: false},
+              { data: 'fullName', name: 'fullName', orderable: false},
+              { data: 'birthDate', name: 'birthDate', orderable: false},
             ],
 
             columnDefs: [
                    
-                    { "targets": 4, "width": "5%"},
-                    { "targets": 5, "width": "20%" ,
-                      "render": function (data, type, col, meta) {
-                         return type === 'display'? '<i class="fa fa-glasses"></i>' + '<div align="left" title="' + 
-                         col.diagnosis + '">'+ data : data;
-                      }     
-                    },
-                    { "targets": 6, "visible":false}                    
-                    
-                  ],
+              { "targets": 3, "width": "5%"},
+              { "targets": 4, "width": "20%" ,
+                "render": function (data, type, col, meta) {
+                    return type === 'display'? '<i class="fa fa-glasses"></i>' + '<div align="left" title="' + 
+                    col.diagnosis + '">'+ data : data;
+                }     
+              },
+              { "targets": 5, "visible":false} ,
+              { "targets": 9, "visible":false},   
+              { "targets": 10, "visible":false}                
+                
+              ],
 
-          order: [[1, 'desc']]
+          order: [[0, 'desc']]
 
          
               

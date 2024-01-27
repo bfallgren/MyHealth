@@ -35,13 +35,12 @@
         <table class="row-border table" id="datatable-crud">
           <thead style=color:red>
             <tr>
-              <th>Patient</th>
               <th>Appt Date</th>
               <th>Doctor</th>
               <th>Specialty</th>
               <th>Fee</th>
               <th>Reason/Diagnosis</th>
-              <th>Diagnosis</th>
+              <th> </th>
               <th>Action</th>
             </tr>
           </thead>
@@ -120,31 +119,45 @@
               {
                   extend: 'copy',
                   exportOptions: {
-                      columns: [ 1, 2, 3, 5, 6] //Your Column value those you want
+                      columns: [ 0, 1, 2, 3, 4, 5] //Your Column value those you want
                   }
               },
               {
                   extend: 'csv',
                   exportOptions: {
-                    columns: [ 1, 2, 3, 5, 6] //Your Column value those you want
+                    columns: [ 0, 1, 2, 3, 4, 5] //Your Column value those you want
                   }
               },
               {
                   extend: 'excel',
                   exportOptions: {
-                    columns: [1, 2, 3, 5, 6] //Your Column value those you want
+                    columns: [0, 1, 2, 3, 4, 5] //Your Column value those you want
                   }
               },
               {
                   extend: 'pdf',
+                  title: "Surgeries & Procedures",
+                  messageTop: function() {
+                    var fullNameCol = $('#datatable-crud').dataTable().api().cell(0, 7).data();
+                    var birthDateCol = $('#datatable-crud').dataTable().api().cell(0, 8).data();
+                    
+                    return "Patient: " + fullNameCol + " , D-O-B: " + birthDateCol;
+                  },
                   exportOptions: {
-                    columns: [1, 2, 3, 5, 6] //Your Column value those you want
+                    columns: [ 0, 1, 2, 3, 4, 5] //Your Column value those you want
                   }
               },
               {
                   extend: 'print',
+                  title: "Surgeries & Procedures",
+                  messageBottom: function() {
+                    var fullNameCol = $('#datatable-crud').dataTable().api().cell(0, 7).data();
+                    var birthDateCol = $('#datatable-crud').dataTable().api().cell(0, 8).data();
+                    
+                    return "Patient: " + fullNameCol + " , D-O-B: " + birthDateCol;
+                  },
                   exportOptions: {
-                    columns: [ 1, 2, 3, 5, 6] //Your Column value those you want
+                    columns: [ 0, 1, 2, 3, 4, 5] //Your Column value those you want
                   }
               },
              
@@ -153,7 +166,6 @@
            ajax: "{{ url('surgery') }}",
            columns: [
                                         
-              { data: 'patientName', name: 'patientName'},
               { data: 'apptDate', name: 'apptDate' },
               { data: 'doctorName', name: 'doctorName'},      
               { data: 'doctorSpecialty', name: 'doctorSpecialty' },
@@ -165,23 +177,25 @@
               { data: 'reason', name: 'reason',  "className": "reason-class", orderable: false },
               { data: 'diagnosis', name: 'diagnosis' }, 
               { data: 'action', name: 'action', orderable: false},
+              { data: 'fullName', name: 'fullName', orderable: false},
+              { data: 'birthDate', name: 'birthDate', orderable: false},
             ],
 
             columnDefs: [
-                    { "targets": 3, "width": "15%"},
-                    { "targets": 5, "width": "20%" ,
+                    { "targets": 2, "width": "15%"},
+                    { "targets": 4, "width": "20%" ,
                       "render": function (data, type, col, meta) {
                          return type === 'display'? '<i class="fa fa-glasses"></i>' + '<div align="left" title="' + 
                          col.diagnosis + '">'+ data : data;
                       }     
                     },
-                    { "targets": 6, "visible":false}                    
+                    { "targets": 5, "visible":false} ,
+                    { "targets": 7, "visible":false},   
+                    { "targets": 8, "visible":false}                      
                     
                   ],
 
-          order: [[1, 'desc']]
-
-         
+          order: [[0, 'desc']]
               
       });
 

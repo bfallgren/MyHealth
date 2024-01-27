@@ -26,10 +26,23 @@
         @csrf
         <input name="_method" type="hidden" value="PATCH">
         <div class="row">
+            
             <div class="form-group col-md-3">
-                <label for="name">Patient:</label>
-                <input type="text" size="16" maxlength="32" class="form-control" name="name" value="{{$member->name}}">
-            </div>
+              <label for="fullName">Full Name:</label>
+              <input type="text" size="48" maxlength="48" class="form-control" name="fullName" value="{{$member->fullName}}">
+          </div>
+          <div class="form-group col-md-3">
+              <label for="birthDate">Birth:</label>
+              <input type="date" class="form-control" name="birthDate" value="{{$member->birthDate}}">
+          </div>
+          <div class="form-group col-md-3">
+              <label for="insurance">Pri. Insurance:</label>
+              <input type="text" size="48" maxlength="48" class="form-control" name="insurance" value="{{$member->insurance}}">
+          </div>
+          <div class="form-group col-md-3">
+              <label for="memberID">Ins. Member ID:</label>
+              <input type="text" size="24" maxlength="24" class="form-control" name="memberID" value="{{$member->memberID}}">
+          </div>
             <div class="form-group col-md-3">
                 <label for="primaryDoctor">Primary Doctor:</label>
                 <select name="primaryDoctor" class="form-control">

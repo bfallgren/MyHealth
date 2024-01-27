@@ -29,16 +29,6 @@
         <div class="row">
           <div class="col-md-12"></div>
            
-          <div class="form-group col-md-4">                 
-             <label for="patientName">Patient:</label>
-            <select name="patientName" class="form-control">
-              <option value="">--Select Patient--</option>
-                @foreach ($patients as $patients => $value)
-                  <option > {{ $value }}</option>   
-                @endforeach
-            </select>
-          </div>
-
           <div class="form-group col-md-4">
             <label for="vDate">Date of Vaccine:</label>
             <input type="date" class="form-control" name="vDate">

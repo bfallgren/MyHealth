@@ -15,36 +15,18 @@ class CreateImagesTable extends Migration
     {
         Schema::create('images', function (Blueprint $table) {
             $table->bigIncrements('id');
-            $table->string('patientName');
+            $table->string('patientID');
             $table->date('apptDate');
-            $table->string('doctorName');
-            $table->string('doctorSpecialty');
+            $table->string('doctorName',32);
+            $table->string('doctorSpecialty',24);
             $table->integer('fee')->nullable();
-            $table->string('reason')->nullable();
-            $table->string('diagnosis')->nullable();
+            $table->string('reason',80)->nullable();
+            $table->string('diagnosis',512)->nullable();
             $table->integer('vitalsWeight')->nullable();
-            $table->string('vitalsBP')->nullable();
+            $table->string('vitalsBP',16)->nullable();
             $table->timestamps();
         });
-         Schema::table('images', function ($table) {
-            DB::statement('ALTER TABLE images MODIFY COLUMN patientName VARCHAR(32)');
-            DB::statement('ALTER TABLE images MODIFY COLUMN doctorName VARCHAR(32)');
-            DB::statement('ALTER TABLE images MODIFY COLUMN doctorSpecialty VARCHAR(24)');
-            DB::statement('ALTER TABLE images MODIFY COLUMN reason VARCHAR(80)');
-            DB::statement('ALTER TABLE images MODIFY COLUMN diagnosis VARCHAR(512)');
-            DB::statement('ALTER TABLE images MODIFY COLUMN vitalsBP VARCHAR(16)');
-      
-        }); 
-
-         Schema::table('images', function ($table) {
-            DB::statement('ALTER TABLE images MODIFY COLUMN patientName VARCHAR(32)');
-            DB::statement('ALTER TABLE images MODIFY COLUMN doctorName VARCHAR(32)');
-            DB::statement('ALTER TABLE images MODIFY COLUMN doctorSpecialty VARCHAR(24)');
-            DB::statement('ALTER TABLE images MODIFY COLUMN reason VARCHAR(80)');
-            DB::statement('ALTER TABLE images MODIFY COLUMN diagnosis VARCHAR(512)');
-            DB::statement('ALTER TABLE images MODIFY COLUMN vitalsBP VARCHAR(16)');
-      
-        }); 
+        
     }
 
     /**

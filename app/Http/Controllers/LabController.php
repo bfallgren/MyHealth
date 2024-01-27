@@ -15,49 +15,51 @@ class LabController extends Controller
 {
     public function index(Request $request)
     {
+        if(Auth::check()) { 
+            $currentuser = Auth::user()->id;
+           
+            $data = DB::table('labs')
+            ->join('patients','patients.id','labs.patientID')
+            ->select('labs.*','patients.fullName','patients.birthDate')
+            ->where('patientID','=',$currentuser)
+            ->orderBy('testDate', 'desc')
+            ->get();
 
-        $currentuser = Auth::user()->name;
-     
-       $data = DB::table('labs')
-       ->select('labs.*')
-       ->where('patientName','=',$currentuser)
-       ->get();
-
-      if(request()->ajax()) {
-        return datatables()->of($data)
-       
-        ->addColumn('clickme', function ($rows) {
-        
-        })
-
-        ->addColumn('action', function ($rows) {
-          $button = '<div class="btn-group btn-group-xs">';
-          $button .= '<a href="/lab/' . $rows->id . '/edit" title="Edit" ><i class="fa fa-edit" style="font-size:24px"></i></a>';
-          $button .= '<button type="button" title="Delete" name="deleteButton" id="' . $rows->id . '" class="deleteButton"><i class="fas fa-trash-alt" style="color:red"></i></button>';
-          $button .= '</div>';
-          return $button;
-      })
-      ->rawColumns(['action'])
-      ->make(true);
-
-
+            if(request()->ajax()) {
+                return datatables()->of($data)    
+                ->addColumn('clickme', function ($rows) {
+                })
+                ->addColumn('action', function ($rows) {
+                    $button = '<div class="btn-group btn-group-xs">';
+                    $button .= '<a href="/lab/' . $rows->id . '/edit" title="Edit" ><i class="fa fa-edit" style="font-size:24px"></i></a>';
+                    $button .= '<button type="button" title="Delete" name="deleteButton" id="' . $rows->id . '" class="deleteButton"><i class="fas fa-trash-alt" style="color:red"></i></button>';
+                    $button .= '</div>';
+                    return $button;
+                })
+                ->rawColumns(['action'])
+                ->make(true);
+            }
+                return view('newlab.index'); 
+        }
+        else {
+            return redirect()->to('/');
+        }
     }
 
-        return view('newlab.index'); 
-    }
-
-public function create()
+    public function create()
     {
+        if(Auth::check()) {  
      /*
             ADDED FOR DYNAMIC DROPDOWN
     */
-        $patients = DB::table('patients')
-        ->orderby('name','asc')
-        ->pluck("name","id");
-        $doctors = DB::table('doctors')
-        ->orderby('name','asc')
-        ->pluck("name","id");
-        return view('newlab.create',compact('patients','doctors'));
+            $doctors = DB::table('doctors')
+            ->orderby('name','asc')
+            ->pluck("name","id");
+            return view('newlab.create',compact('doctors'));
+        }
+        else {
+            return redirect()->to('/');    
+        }
     }
 
     /**
@@ -69,14 +71,14 @@ public function create()
     public function store(Request $request)
     {
         $request->validate([
-        'patientName' => 'required',
         'testDate' => 'required',
         'component' => 'required',
         'measuredValue' => 'required|numeric',
         ]);
 
         $newRec = new Lab();
-        $newRec->patientName = $request->get('patientName');
+        $currentuser = Auth::user()->id;
+        $newRec->patientID = $currentuser;
         $newRec->testDate = $request->get('testDate');
         $newRec->component = $request->get('component');
         $newRec->measuredValue = $request->get('measuredValue');
@@ -106,14 +108,16 @@ public function create()
      */
     public function edit($id)
     {
-        $data = Lab::find($id);
-        $patients = DB::table('patients')
-        ->orderby('name','asc')
-        ->pluck("name","id");
-        $doctors = DB::table('doctors')
-        ->orderby('name','asc')
-        ->pluck("name","id");
-        return view('newlab.edit',compact('data','id','patients','doctors'));
+        if(Auth::check()) {   
+            $data = Lab::find($id);
+            $doctors = DB::table('doctors')
+            ->orderby('name','asc')
+            ->pluck("name","id");
+            return view('newlab.edit',compact('data','id','doctors'));
+        }
+        else {
+            return redirect()->to('/');    
+        }
     }
 
     /**
@@ -126,13 +130,13 @@ public function create()
     public function update(Request $request, $id)
     {
          $request->validate([
-        'patientName' => 'required',
         'testDate' => 'required',
         'component' => 'required',
         'measuredValue' => 'required|numeric',
         ]);
         $data = Lab::find($id);
-        $data->patientName = $request->get('patientName');
+        $currentuser = Auth::user()->id;
+        $data->patientID = $currentuser;
         $data->testDate = $request->get('testDate');
         $data->component = $request->get('component');
         $data->measuredValue = $request->get('measuredValue');
@@ -151,8 +155,6 @@ public function create()
     public function destroy($id)
     {
         DB::table("labs")->delete($id);
-        //return response()->json(['success'=>"Lab Record Deleted successfully.", 'tr'=>'tr_'.$id]);
         return redirect('lab')->with('success','LabTest Record has been deleted');
     }    
 }
-?>

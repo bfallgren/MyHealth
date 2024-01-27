@@ -14,10 +14,10 @@ class AddCommentsToFamhistsTable extends Migration
     public function up()
     {
         Schema::table('famhists', function (Blueprint $table) {
-            $table->integer('comments')->after('symptoms');
+            $table->string('comments',256)->after('symptoms')->nullable();
         });
 
-        DB::statement('ALTER TABLE famhists MODIFY COLUMN comments VARCHAR(256)');
+      /*  DB::statement('ALTER TABLE famhists MODIFY COLUMN comments VARCHAR(256)'); */
     }
 
     /**

@@ -15,17 +15,18 @@ class CreateDoctorsTable extends Migration
     {
         Schema::create('doctors', function (Blueprint $table) {
             $table->bigIncrements('id');
-            $table->string('name');
-            $table->string('specialty');
+            $table->string('name',32);
+            $table->integer('patientID');
+            $table->string('specialty',32);
+            $table->string('location',36)->nullable();
+            $table->string('hospital',36)->nullable();
+            $table->boolean('active')->nullable();
+            $table->integer('doctorRating')->nullable();
+            $table->integer('staffRating')->nullable();
+            $table->string('services',64)->nullable();
             $table->timestamps();
         });
-        Schema::table('doctors', function ($table) {
-            DB::statement('ALTER TABLE doctors MODIFY COLUMN name VARCHAR(32)');
-            DB::statement('ALTER TABLE doctors MODIFY COLUMN specialty VARCHAR(32)');
-            
       
-        }); 
-
     }
 
     /**

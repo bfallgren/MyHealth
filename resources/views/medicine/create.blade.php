@@ -26,15 +26,7 @@
       
       <form method="post" action="{{url('meds')}}" enctype="multipart/form-data">
         @csrf
-        <div class="form-group col-md-4">                 
-             <label for="patient">Patient:</label>
-            <select name="patient" class="form-control">
-              <option value="">--Select Patient--</option>
-                @foreach ($patients as $patients => $value)
-                  <option > {{ $value }}</option>   
-                @endforeach
-            </select>
-          </div>
+        <div class="row">
           <div class="form-group col-md-3">
               <label for="name">Drug:</label>
               <input type="text" size="32" maxlength="32" class="form-control" name="name">
@@ -49,7 +41,7 @@
           </div>
           <div class="form-group col-md-3">
             <label for="status">Status:</label>
-            <input type="text" size="40" maxlength="80" class="form-control" name="status">
+            <textarea type="text" size="40" maxlength="80" class="form-control" name="status"></textarea>
           </div>
           <div class="form-group col-md-3">
             <label for="sideAffects">Side Affects:</label>
@@ -57,9 +49,10 @@
           </div>
           <div class="form-group col-md-3">
             <label for="notes">Notes:</label>
-            <input type="text" size="32" maxlength="80" class="form-control" name="notes">
+            <textarea type="text" size="32" maxlength="80" class="form-control" name="notes"></textarea>
           </div>
         </div>
+
         <div class="row">
             <div class="form-group col-md-4" style="margin-top:10px">
                 <button type="submit" class="btn btn-success">Submit</button>

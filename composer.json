@@ -9,9 +9,10 @@
     "license": "MIT",
     "require": {
         "php": "^7.4.1",
+        "barryvdh/laravel-debugbar": "^3.7",
         "fideloper/proxy": "^4.0",
-        "laravel/framework": "^6.0",
-        "laravel/tinker": "^1.0",
+        "laravel/framework": "^7.0",
+        "laravel/tinker": "^2.0",
         "laravel/ui": "*",
         "laravelcollective/html": "^6.2.1",
         "yajra/laravel-datatables-oracle": "^9.18"
@@ -20,8 +21,8 @@
         "beyondcode/laravel-dump-server": "^1.0",
         "filp/whoops": "^2.0",
         "mockery/mockery": "^1.0",
-        "nunomaduro/collision": "^2.0",
-        "phpunit/phpunit": "^7.5"
+        "nunomaduro/collision": "^4.1",
+        "phpunit/phpunit": "^8.5"
     },
     "config": {
         "optimize-autoloader": true,

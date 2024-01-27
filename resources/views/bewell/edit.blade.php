@@ -26,16 +26,7 @@
         @csrf
         <input name="_method" type="hidden" value="PATCH">
         <div class="row">
-          <div class="col-md-12"></div>
-          <div class="form-group col-md-4">
-            <label for="PatientName">Patient:</label>
-            <select name="patientName" class="form-control">
-              <option value="{{$appt->patientName}}">{{$appt->patientName}}</option>
-                @foreach ($patients as $patients => $value)
-                  <option > {{ $value }}</option>   
-                @endforeach
-            </select>
-          </div>
+                   
           <div class="form-group col-md-4">
             <label for="apptDate">Date of Appt.:</label>
             <input type="date" class="form-control" name="apptDate" value="{{$appt->apptDate}}">

@@ -26,14 +26,7 @@
         @csrf
         <input name="_method" type="hidden" value="PATCH">
         <div class="row">
-          <div class="form-group col-md-4">
-            <select name="patient" class="form-control">
-              <option value="{{$fhist->patient}}">{{$fhist->patient}}</option>
-                @foreach ($patients as $patients => $value)
-                  <option > {{ $value }}</option>   
-                @endforeach
-            </select>
-          </div>
+          
           <div class="form-group col-md-3">
               <label for="familyMember">Family Member:</label>
               <input type="text" size="16" maxlength="16" class="form-control" name="familyMember" value="{{$fhist->familyMember}}">

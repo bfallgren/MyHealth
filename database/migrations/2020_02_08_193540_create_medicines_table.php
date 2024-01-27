@@ -15,27 +15,17 @@ class CreateMedicinesTable extends Migration
     {
         Schema::create('medicines', function (Blueprint $table) {
             $table->bigIncrements('id');
-            $table->string('patient');
-            $table->string('name');
-            $table->string('dosage');
+            $table->integer('patientID');
+            $table->string('name',32);
+            $table->string('dosage',8);
             $table->integer('dailyFreq');
-            $table->string('status')->nullable();
-            $table->string('sideAffects')->nullable();
-            $table->string('precautions')->nullable();
+            $table->string('status',32)->nullable();
+            $table->string('sideAffects',32)->nullable();
+            $table->string('precautions',80)->nullable();
             $table->timestamps();
         });
     
-
-         Schema::table('medicines', function ($table) {
-            DB::statement('ALTER TABLE medicines MODIFY COLUMN patient VARCHAR(32)');
-            DB::statement('ALTER TABLE medicines MODIFY COLUMN name VARCHAR(32)');
-            DB::statement('ALTER TABLE medicines MODIFY COLUMN dosage VARCHAR(8)');
-            DB::statement('ALTER TABLE medicines MODIFY COLUMN status VARCHAR(32)');
-            DB::statement('ALTER TABLE medicines MODIFY COLUMN sideAffects VARCHAR(32)');
-            DB::statement('ALTER TABLE medicines MODIFY COLUMN precautions VARCHAR(80)');
-            
-      
-        }); 
+       
     }
 
     /**

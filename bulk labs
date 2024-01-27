@@ -1,0 +1,15 @@
+Menu:
+    Create new dropdown menu for templates (done)
+        create menuitem for each lab type (cbc, comp, lipid, etc.) (?)
+            
+Controller:
+    Create LabTemplateController to create and store templates (done)
+    Add function to store lab records using same functionality as template records (pending)
+
+Blade:
+    make Create, Edit and Index blades (done)
+        Within Index blade add button to create and store Lab records based on template,
+         filtered by type (pending) or use checkbox for lab record selection (pending)
+
+ See also: https://helpdocs.quickadminpanel.com/customizing-the-code/how-to-add-mass-actions-to-datatable
+ 

@@ -27,18 +27,7 @@
       <form method="post" action="{{url('myHealth')}}" enctype="multipart/form-data">
         @csrf
         <div class="row">
-          <div class="col-md-12"></div>
-           
-          <div class="form-group col-md-4">                 
-             <label for="patientName">Patient:</label>
-            <select name="patientName" class="form-control">
-              <option value="">--Select Patient--</option>
-                @foreach ($patients as $patients => $value)
-                  <option > {{ $value }}</option>   
-                @endforeach
-            </select>
-          </div>
-
+                  
           <div class="form-group col-md-4">
             <label for="apptDate">Date of Appt.:</label>
             <input type="date" class="form-control" name="apptDate">
@@ -89,9 +78,10 @@
         </div>
         <div class="row">
           <div class="col-md-12"></div>
-          <div class="form-group col-md-4" style="margin-top:10px">
-            <button type="submit" class="btn btn-success">Submit</button>
-            <a href="/myHealth" class="btn btn-warning">Cancel</a>
+            <div class="form-group col-md-4" style="margin-top:10px">
+              <button type="submit" class="btn btn-success">Submit</button>
+              <a href="/myHealth" class="btn btn-warning">Cancel</a>
+            </div>
           </div>
         </div>
       </form>

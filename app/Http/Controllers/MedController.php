@@ -19,31 +19,34 @@ class MedController extends Controller
      */
     public function index(Request $request)
     {
-      $currentuser = Auth::user()->name;
-        
-      $data = DB::table('medicines')
-      ->select('medicines.*')
-      ->where('patient','=',$currentuser)
-      ->orderBy('name', 'asc')
-      ->get();
-    
-      if(request()->ajax()) {
-        return datatables()->of($data)
-       
-        ->addColumn('action', function ($rows) {
-          $button = '<div class="btn-group btn-group-xs">';
-          $button .= '<a href="/meds/' . $rows->id . '/edit" title="Edit" ><i class="fa fa-edit" style="font-size:24px"></i></a>';
-          $button .= '<button type="button" title="Delete" name="deleteButton" id="' . $rows->id . '" class="deleteButton"><i class="fas fa-trash-alt" style="color:red"></i></button>';
-          $button .= '</div>';
-          return $button;
-      })
-      ->rawColumns(['action'])
-      ->make(true);
+      if(Auth::check()) { 
+          $currentuser = Auth::user()->id;
+         
+          $data = DB::table('medicines')
+          ->join('patients','patients.id','medicines.patientID')
+          ->select('medicines.*','patients.fullName','patients.birthDate')
+          ->where('patientID','=',$currentuser)
+          ->orderBy('name', 'asc')
+          ->get();
 
-
-    }
-
-        return view('medicine.index'); 
+          if(request()->ajax()) {
+            return datatables()->of($data)
+          
+            ->addColumn('action', function ($rows) {
+                $button = '<div class="btn-group btn-group-xs">';
+                $button .= '<a href="/meds/' . $rows->id . '/edit" title="Edit" ><i class="fa fa-edit" style="font-size:24px"></i></a>';
+                $button .= '<button type="button" title="Delete" name="deleteButton" id="' . $rows->id . '" class="deleteButton"><i class="fas fa-trash-alt" style="color:red"></i></button>';
+                $button .= '</div>';
+                return $button;
+            })
+            ->rawColumns(['action'])
+            ->make(true);
+          }
+          return view('medicine.index'); 
+      }
+      else {
+        return redirect()->to('/');
+      }
     }
 
     /**
@@ -53,11 +56,12 @@ class MedController extends Controller
      */
     public function create()
     {
-             
-        $patients = DB::table('patients')
-        ->orderby('name','asc')
-        ->pluck("name","id");
-        return view('medicine.create',compact('patients'));
+      if(Auth::check()) {        
+        return view('medicine.create');
+      }
+      else {
+        return redirect()->to('/');
+      }
     }
 
     /**
@@ -69,13 +73,13 @@ class MedController extends Controller
     public function store(Request $request)
     {
       $request->validate([
-        'patient' => 'required',
         'name' => 'required',
         'dosage' => 'required',
         'dailyFreq' => 'required|numeric',
         ]);
-      $newRec = new Medicine();
-        $newRec->patient = $request->get('patient');
+        $newRec = new Medicine();
+        $currentuserid = Auth::user()->id;
+        $newRec->patientID = $currentuserid;
         $newRec->name = $request->get('name');
         $newRec->dosage = $request->get('dosage');
         $newRec->dailyFreq = $request->get('dailyFreq');
@@ -107,12 +111,14 @@ class MedController extends Controller
      */
     public function edit($id)
     {
-        $patients = DB::table('patients')
-        ->orderby('name','asc')
-        ->pluck("name","id");
+      if(Auth::check()) {  
         $med = Medicine::find($id);
         
-        return view('medicine.edit',compact('med','id','patients'));
+        return view('medicine.edit',compact('med','id'));
+      }
+      else {
+        return redirect()->to('/');
+      }
     }
 
     /**
@@ -126,7 +132,6 @@ class MedController extends Controller
     {
       
       $request->validate([
-        'patient' => 'required',
         'name' => 'required',
         'dosage' => 'required',
         'dailyFreq' => 'required|numeric',
@@ -134,7 +139,8 @@ class MedController extends Controller
       $med= Medicine::find($id);
         
         $med->name = $request->get('name');
-        $med->patient = $request->get('patient');
+        $currentuserid = Auth::user()->id;
+        $med->patientID = $currentuserid;
         $med->dosage = $request->get('dosage');
         $med->dailyFreq = $request->get('dailyFreq');
         $med->status = $request->get('status');

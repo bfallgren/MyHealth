@@ -15,17 +15,14 @@ class CreatePatientsTable extends Migration
     {
         Schema::create('patients', function (Blueprint $table) {
             $table->bigIncrements('id');
-            $table->string('name');
-            $table->string('primaryDoctor');
+            $table->string('name',32);
+            $table->string('fullName',48)->nullable();
+            $table->date('birthDate')->nullable();
+            $table->string('insurance',48)->nullable();
+            $table->string('memberID',24)->nullable();
+            $table->string('primaryDoctor',32);
             $table->timestamps();
         });
-        Schema::table('patients', function ($table) {
-            DB::statement('ALTER TABLE patients MODIFY COLUMN name VARCHAR(32)');
-            DB::statement('ALTER TABLE patients MODIFY COLUMN primaryDoctor VARCHAR(32)');
-            
-      
-        }); 
-
     }
 
     /**

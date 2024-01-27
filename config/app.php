@@ -177,6 +177,7 @@ return [
         App\Providers\EventServiceProvider::class,
         App\Providers\RouteServiceProvider::class,
         Collective\Html\HtmlServiceProvider::class,
+        Barryvdh\Debugbar\ServiceProvider::class,
     ],
 
     /*
@@ -230,7 +231,7 @@ return [
         'Form' => 'Collective\Html\FormFacade',
         'HTML' => 'Collective\Html\HtmlFacade',
         'DataTables'=> Yajra\DataTables\Facades\DataTables::class,
-
+        'Debugbar' => Barryvdh\Debugbar\Facades\Debugbar::class,
 
     ],
 

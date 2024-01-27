@@ -7,6 +7,30 @@
 <a href="https://packagist.org/packages/laravel/framework"><img src="https://poser.pugx.org/laravel/framework/license.svg" alt="License"></a>
 </p>
 
+## About
+
+![GitHub Logo](/public/images/healthcare.jpg)
+
+Personal Health Records:
+
+![GitHub Logo](/public/images/MyHealth/Imaging.jpg)
+![GitHub Logo](/public/images/MyHealth/Immunizations.jpg)
+![GitHub Logo](/public/images/MyHealth/LabTests.jpg)
+![GitHub Logo](/public/images/MyHealth/Meds.jpg)
+![GitHub Logo](/public/images/MyHealth/Surgeries.jpg)
+![GitHub Logo](/public/images/MyHealth/Wellness.jpg)
+
+Templates (Lab Tests):
+
+![GitHub Logo](/public/images/MyHealth/LabTemplates.jpg)
+
+Profiles:
+
+![GitHub Logo](/public/images/MyHealth/Patients.jpg)
+![GitHub Logo](/public/images/MyHealth/Doctors.jpg)
+![GitHub Logo](/public/images/MyHealth/FamilyHistory.jpg)
+    
+
 ## Installation
 
 1.	git clone

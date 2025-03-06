@@ -37,11 +37,19 @@
           </div>
           <div class="form-group col-md-3">
             <label for="symptoms">Symptoms:</label>
-            <textarea type="text" size="80" maxlength="256" class="form-control" name="symptoms"></textarea>
+            <textarea type="text" size="80" maxlength="256" class="form-control" name="symptoms" id="ta_sym"></textarea>
+            <div id="sym-count">
+              <span id="curr-sym-cnt">0</span>
+              <span id="max-sym-cnt">/ 256</span>
+            </div>
           </div>   
           <div class="form-group col-md-3">
             <label for="comments">Comments:</label>
-            <textarea type="text" size="80" maxlength="256" class="form-control" name="comments"></textarea>
+            <textarea type="text" size="80" maxlength="256" class="form-control" name="comments" id="ta_cmnt"></textarea>
+            <div id="cmnt-count">
+              <span id="curr-cmnt-cnt">0</span>
+              <span id="max-cmnt-cnt">/ 256</span>
+            </div>
           </div>   
         
         <div class="row">
@@ -52,6 +60,30 @@
         </div>
       </form>
     </div>
+    <script>
+    
+    $('#ta_sym').keyup(function() {
+      
+      var characterCount = $(this).val().length,
+          current = $('#curr-sym-cnt'),
+          maximum = $('#max-sym-cnt'),
+          theCount = $('#sym-count');
+        
+      current.text(characterCount);   
+          
+    });
+
+    $('#ta_cmnt').keyup(function() {
+      
+      var characterCount = $(this).val().length,
+          current = $('#curr-cmnt-cnt'),
+          maximum = $('#max-cmnt-cnt'),
+          theCount = $('#cmnt-count');
+        
+      current.text(characterCount);   
+          
+    });
+  </script>
   </body>
 </html>
 @endsection

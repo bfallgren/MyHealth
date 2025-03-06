@@ -41,7 +41,14 @@
           </div>
           <div class="form-group col-md-3">
             <label for="status">Status:</label>
-            <textarea type="text" size="40" maxlength="80" class="form-control" name="status">{{$med->status}}</textarea>
+            <textarea type="text" size="40" maxlength="80" class="form-control" id="ta_status" name="status">{{$med->status}}</textarea>
+           
+            <input type="hidden" id="statCharLength" value="{{ Str::length($med->status) }}">
+
+            <div id="status-count">
+              <span id="curr-stat-cnt">0</span>
+              <span id="max-stat-cnt">/ 80</span>
+            </div>
           </div>
           <div class="form-group col-md-3">
             <label for="sideAffects">Side Affects:</label>
@@ -49,8 +56,16 @@
           </div>
           <div class="form-group col-md-3">
             <label for="notes">Notes:</label>
-            <textarea type="text" size="32" maxlength="80" class="form-control" name="notes">{{$med->notes}}</textarea>
+            <textarea type="text" size="32" maxlength="255" class="form-control" id="ta_notes" name="notes">{{$med->notes}}</textarea>
+           
+            <input type="hidden" id="notesCharLength" value="{{ Str::length($med->notes) }}">
+            
+            <div id="notes-count">
+              <span id="curr-notes-cnt">0</span>
+              <span id="max-notes-cnt">/ 255</span>
+            </div>
           </div>
+          
         </div>
         <div class="row">
           <div class="form-group col-md-12" style="margin-top:10px">
@@ -62,4 +77,49 @@
     </div>
   </body>
 </html>
+
+<script>
+  window.addEventListener('DOMContentLoaded', function() {
+  // Your code to be executed when the DOM is ready
+    var notesLength = document.getElementById('notesCharLength').value;
+    //console.log("DomContentLoaded Character length:", notesCharLength);
+    var characterCount = notesLength,
+        current = $('#curr-notes-cnt'),
+        maximum = $('#max-notes-cnt'),
+        theCount = $('#notes-count');
+      
+    current.text(characterCount);  
+
+    var statLength = document.getElementById('statCharLength').value;
+    //console.log("DomContentLoaded Character length:", statCharLength);
+    var characterCount = statLength,
+        current = $('#curr-stat-cnt'),
+        maximum = $('#max-stat-cnt'),
+        theCount = $('#status-count');
+      
+    current.text(characterCount);  
+});
+
+  $('#ta_status').keyup(function() {
+    
+    var characterCount = $(this).val().length,
+        current = $('#curr-stat-cnt'),
+        maximum = $('#max-stat-cnt'),
+        theCount = $('#status-count');
+      
+    current.text(characterCount);   
+        
+  });
+
+  $('#ta_notes').keyup(function() {
+    
+    var characterCount = $(this).val().length,
+        current = $('#curr-notes-cnt'),
+        maximum = $('#max-notes-cnt'),
+        theCount = $('#notes-count');
+      
+    current.text(characterCount);   
+        
+  });
+</script>
 @endsection

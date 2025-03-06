@@ -28,7 +28,12 @@
           <div class="pull-left">
             <h2>Doctors</h2>
           </div>
-          <div class="pull-right mb-2">
+        </div>
+      </div>
+
+      <div class="row">
+        <div class="col-lg-12 margin-tb">
+          <div class="pull-left mb-2">
             <a class="btn btn-success" href="{{ route('doctor.create') }}"> Add Doctor</a>
           </div>
         </div>
@@ -194,7 +199,7 @@
                      
                   ],
 
-                 order: [[0, 'asc']]
+                 order: [[4, 'desc'], [0, 'asc']]
               
       });
 

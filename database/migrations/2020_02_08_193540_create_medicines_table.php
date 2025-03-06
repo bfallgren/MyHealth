@@ -19,9 +19,9 @@ class CreateMedicinesTable extends Migration
             $table->string('name',32);
             $table->string('dosage',8);
             $table->integer('dailyFreq');
-            $table->string('status',32)->nullable();
+            $table->string('status',80)->nullable();
             $table->string('sideAffects',32)->nullable();
-            $table->string('precautions',80)->nullable();
+            $table->string('notes',255)->nullable();
             $table->timestamps();
         });
     

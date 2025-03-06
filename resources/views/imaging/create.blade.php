@@ -62,12 +62,20 @@
 
           <div class="form-group col-md-4">
             <label for="reason">Reason:</label>
-            <textarea type="text" size="80" maxlength="80" class="form-control" name="reason"></textarea>
+            <textarea type="text" size="80" maxlength="80" class="form-control" name="reason" id="ta_reason"></textarea>
+            <div id="reason-count">
+              <span id="curr-rsn-cnt">0</span>
+              <span id="max-rsn-cnt">/ 80</span>
+            </div>
           </div>
 
           <div class="form-group col-md-4">
             <label for="diagnosis">Diagnosis:</label>
-            <textarea type="text" size="80" maxlength="512" class="form-control" name="diagnosis"></textarea>
+            <textarea type="text" size="80" maxlength="512" class="form-control" name="diagnosis" id="ta_diag"></textarea>
+            <div id="diag-count">
+              <span id="curr-diag-cnt">0</span>
+              <span id="max-diag-cnt">/ 512</span>
+            </div>
           </div>
 
         </div>
@@ -115,6 +123,30 @@
       });
   });    
 
+  </script>
+  <script>
+    
+    $('#ta_reason').keyup(function() {
+      
+      var characterCount = $(this).val().length,
+          current = $('#curr-rsn-cnt'),
+          maximum = $('#max-rsn-cnt'),
+          theCount = $('#rsn-count');
+        
+      current.text(characterCount);   
+          
+    });
+
+    $('#ta_diag').keyup(function() {
+      
+      var characterCount = $(this).val().length,
+          current = $('#curr-diag-cnt'),
+          maximum = $('#max-diag-cnt'),
+          theCount = $('#diag-count');
+        
+      current.text(characterCount);   
+          
+    });
   </script>
   </body>
 </html>

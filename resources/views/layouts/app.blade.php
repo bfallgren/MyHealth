@@ -43,7 +43,9 @@
         <script src= "https://cdnjs.cloudflare.com/ajax/libs/pdfmake/0.1.53/vfs_fonts.js"> </script>
         <script src= "https://cdn.datatables.net/buttons/2.0.0/js/buttons.html5.min.js"> </script>
         <script src= "https://cdn.datatables.net/buttons/2.0.0/js/buttons.print.min.js"> </script>
-
+        
+        <!-- added for sweetalert2 export -->
+        <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
     </head>
     <body>
     
@@ -71,17 +73,19 @@
                                     <ul class="dropdown-content" >
 
 
-                                        <li class="dropdown-item btn btn-warning btn-sm"><a href="{{URL::route('myimaging')}}"><i class="fas fa-x-ray"></i>Imaging</a></li>
-                                        <li class="dropdown-item btn btn-warning btn-sm"><a href="{{URL::route('myshots')}}"><i class="fas fa-syringe"></i>Immunizations</a></li>
+                                        <li class="dropdown-item btn btn-warning btn-sm"><a href="{{URL::route('myimaging')}}"><i class="fas fa-x-ray"></i>Imaging</a></li>       
 
                                         <li class="dropdown-item btn btn-warning btn-sm"><a href="{{URL::route('mylab')}}"><i class="fas fa-vials"></i>Lab Tests</a></li>
-
 
                                         <li class="dropdown-item btn btn-warning btn-sm"><a href="{{URL::route('mymeds')}}"><i class="fas fa-prescription"></i>Medications</a></li>
 
                                         <li class="dropdown-item btn btn-warning btn-sm"><a href="{{URL::route('mysurgery')}}"><i class="fas fa-procedures"></i>Surgeries/Procedures</a></li>
 
+                                        <li class="dropdown-item btn btn-warning btn-sm"><a href="{{URL::route('myshots')}}"><i class="fas fa-syringe"></i>Vaccines</a></li>
+                                        
                                         <li class="dropdown-item btn btn-warning btn-sm"><a href="{{URL::route('wellness')}}"><i class="fas fa-stethoscope"></i>Wellness Visits</a></li>
+                                    
+                                    
                                     </ul>
                                 </li>
                             @endguest
@@ -248,7 +252,7 @@
                     <div class="modal-content">
                         <div class="modal-header">
                             <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
-                            <h4 class="modal-title" id="creditModalLabel">MyHealth credits</h4>
+                            <h4 class="modal-title" id="creditModalLabel">MyHealth Credits</h4>
                         </div>
                         <div class="modal-body">
 
@@ -284,7 +288,7 @@
                     <div class="modal-content">
                         <div class="modal-header">
                             <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
-                            <h4 class="modal-title" id="feedbkModalLabel">MyHealth feedback</h4>
+                            <h4 class="modal-title" id="feedbkModalLabel">MyHealth Feedback</h4>
                         </div>
                         <div class="modal-body">
                             <div class="row">
@@ -306,7 +310,7 @@
                     <div class="modal-content">
                         <div class="modal-header">
                             <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
-                            <h4 class="modal-title" id="startModalLabel">Getting started</h4>
+                            <h4 class="modal-title" id="startModalLabel">Getting started with MyHealth</h4>
                         </div>
                         <div class="modal-body">
                             <div class="row">
@@ -339,7 +343,7 @@
                     <div class="modal-content">
                         <div class="modal-header">
                             <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
-                            <h4 class="modal-title" id="buildModalLabel">MyHealth Release</h4>
+                            <h4 class="modal-title" id="buildModalLabel">MyHealth Release Notes</h4>
                         </div>
                         <div class="modal-body">
 

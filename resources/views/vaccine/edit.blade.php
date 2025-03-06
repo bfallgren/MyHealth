@@ -10,7 +10,7 @@
     <script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.6/js/bootstrap.min.js"></script>
     <body>
     <div class="container">
-      <h2>Update Immunization</h2><br  />
+      <h2>Update Vaccine</h2><br  />
 
       @if (count($errors) > 0)
          <div class = "alert alert-danger">
@@ -37,7 +37,12 @@
             </div>
             <div class="form-group col-md-4">
               <label for="comments">Comments:</label>
-              <textarea type="text" size="80" maxlength="512" class="form-control" name="comments">{{$shot->comments}}</textarea>
+              <textarea type="text" size="80" maxlength="512" class="form-control" name="comments" id="ta_cmnt">{{$shot->comments}}</textarea>
+              <input type="hidden" id="cmntCharLength" value="{{ Str::length($shot->comments) }}">
+              <div id="cmnt-count">
+                <span id="curr-cmnt-cnt">0</span>
+                <span id="max-cmnt-cnt">/ 512</span>
+              </div>
             </div>
           </div>
           
@@ -50,6 +55,29 @@
         </div>
       </form>
     </div>
+    <script>
+    window.addEventListener('DOMContentLoaded', function() {
+    // Your code to be executed when the DOM is ready
+      var cmntLength = document.getElementById('cmntCharLength').value;
+      var characterCount = cmntLength,
+          current = $('#curr-cmnt-cnt'),
+          maximum = $('#max-cmnt-cnt'),
+          theCount = $('#cmnt-count');
+        
+      current.text(characterCount);  
+  });
+
+    $('#ta_cmnt').keyup(function() {
+      
+      var characterCount = $(this).val().length,
+          current = $('#curr-cmnt-cnt'),
+          maximum = $('#max-cmnt-cnt'),
+          theCount = $('#cmnt-count');
+        
+      current.text(characterCount);   
+          
+    });
+  </script>
   </body>
 </html>
 @endsection

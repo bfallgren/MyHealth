@@ -5,9 +5,7 @@
 <html lang="en">
   <head>
       <meta charset="UTF-8">
-      <title>My Health - Family History</title>
-      
-             
+      <title>My Health - Family History</title>           
   </head>
   <body>
   
@@ -18,7 +16,12 @@
           <div class="pull-left">
             <h2>Family History</h2>
           </div>
-          <div class="pull-right mb-2">
+        </div>
+      </div>
+
+      <div class="row">
+        <div class="col-lg-12 margin-tb">
+          <div class="pull-left mb-2">
             <a class="btn btn-success" href="{{ route('fam.create') }}"> Add Family History</a>
           </div>
         </div>

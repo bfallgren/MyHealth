@@ -57,11 +57,23 @@
           </div>
           <div class="form-group col-md-4">
             <label for="reason">Reason:</label>
-            <textarea type="text" size="80" maxlength="80" class="form-control" name="reason" >{{$appt->reason}}</textarea>
+            <textarea type="text" size="80" maxlength="80" class="form-control" name="reason" id="ta_reason">{{$appt->reason}}</textarea>
+            <input type="hidden" id="rsnCharLength" value="{{ Str::length($appt->reason) }}">
+
+            <div id="reason-count">
+              <span id="curr-rsn-cnt">0</span>
+              <span id="max-rsn-cnt">/ 80</span>
+            </div>
           </div>
           <div class="form-group col-md-4">
             <label for="diagnosis">Diagnosis:</label>
-            <textarea type="text" size="80" maxlength="512" class="form-control" name="diagnosis" >{{$appt->diagnosis}}</textarea>
+            <textarea type="text" size="80" maxlength="512" class="form-control" name="diagnosis" id="ta_diag">{{$appt->diagnosis}}</textarea>
+            <input type="hidden" id="diagCharLength" value="{{ Str::length($appt->diagnosis) }}">
+
+            <div id="diag-count">
+              <span id="curr-diag-cnt">0</span>
+              <span id="max-diag-cnt">/ 512</span>
+            </div>
           </div>
           <div class="form-group col-md-4">
             <label for="vitalsWeight">Weight:</label>
@@ -126,6 +138,51 @@
       }
     }
   </script>
+  <script>
+    window.addEventListener('DOMContentLoaded', function() {
+    // Your code to be executed when the DOM is ready
+      var rsnLength = document.getElementById('rsnCharLength').value;
+      //console.log("DomContentLoaded Character length:", notesCharLength);
+      var characterCount = rsnLength,
+          current = $('#curr-rsn-cnt'),
+          maximum = $('#max-rsn-cnt'),
+          theCount = $('#rsn-count');
+        
+      current.text(characterCount);  
+
+      var diagLength = document.getElementById('diagCharLength').value;
+      //console.log("DomContentLoaded Character length:", statCharLength);
+      var characterCount = diagLength,
+          current = $('#curr-diag-cnt'),
+          maximum = $('#max-diag-cnt'),
+          theCount = $('#diag-count');
+        
+      current.text(characterCount);  
+  });
+
+    $('#ta_reason').keyup(function() {
+      
+      var characterCount = $(this).val().length,
+          current = $('#curr-rsn-cnt'),
+          maximum = $('#max-rsn-cnt'),
+          theCount = $('#rsn-count');
+        
+      current.text(characterCount);   
+          
+    });
+
+    $('#ta_diag').keyup(function() {
+      
+      var characterCount = $(this).val().length,
+          current = $('#curr-diag-cnt'),
+          maximum = $('#max-diag-cnt'),
+          theCount = $('#diag-count');
+        
+      current.text(characterCount);   
+          
+    });
+  </script>
   </body>
 </html>
+
 @endsection

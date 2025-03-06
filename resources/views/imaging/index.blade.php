@@ -5,9 +5,7 @@
 <html lang="en">
   <head>
       <meta charset="UTF-8">
-      <title>My Health - Imaging</title>
-      
-             
+      <title>My Health - Imaging</title>       
   </head>
   <body>
   
@@ -18,12 +16,19 @@
           <div class="pull-left">
           <h2>Imaging  <i class="fas fa-x-ray"></i></h2>
           </div>
-          <div class="pull-right mb-2">
+      </div>
+      
+      <div class="row">
+        <div class="col-lg-12 margin-tb">
+          <div class="pull-left mb-2">
             <a class="btn btn-success" href="{{ route('imaging.create') }}"> Add Imaging</a>
+          </div>
+          <div class="pull-right mb-2">
+            <a id="popupHelp" class="btn btn-primary"> Help <i class="fas fa-info"></i></a>
           </div>
         </div>
       </div>
-        
+
       @if ($message = Session::get('success'))
           <div class="alert alert-success">
               <p>{{ $message }}</p>
@@ -94,13 +99,22 @@
         <!-- /.modal-dialog -->
     </div>
     <!-- /.modal -->
-  
-
   </body>
 
- 
-
   <script type="text/javascript">
+
+    $('#popupHelp').on('click', function () {
+      Swal.fire({
+        title: "Imaging",
+        html: `
+        <h4>You can <b>hover (or click)</b> over the 
+        <a autofocus>Reason/Diagnosis</a>
+        field to see details</h4>
+      `,
+        width: 700,
+        icon: "info"
+        });
+    })
       
      $(document).ready( function () {
       $.ajaxSetup({
@@ -195,13 +209,9 @@
                     
                   ],
 
-          order: [[0, 'desc']]
-
-         
-              
+          order: [[0, 'desc']]            
       });
 
-      
       var colData;
       var rowData;
       //$('#datatable-crud').on('click', 'td', function () {
@@ -216,7 +226,6 @@
         
         $('#DiagModal').modal("show");
     });
-     
      
     var row_id;
 
@@ -252,11 +261,7 @@
             }
         });
       });
-
-
     });
-
-  
 
   </script>
 </html>  

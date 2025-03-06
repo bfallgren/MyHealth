@@ -23,6 +23,7 @@ class LabController extends Controller
             ->select('labs.*','patients.fullName','patients.birthDate')
             ->where('patientID','=',$currentuser)
             ->orderBy('testDate', 'desc')
+            ->orderBy('component', 'asc')
             ->get();
 
             if(request()->ajax()) {

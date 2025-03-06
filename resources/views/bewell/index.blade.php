@@ -5,21 +5,28 @@
 <html lang="en">
   <head>
       <meta charset="UTF-8">
-      <title>My Health - Wellness Visits</title>
-      
-             
+      <title>My Health - Wellness Visits</title>           
   </head>
+  
   <body>
   
     <div class="container mt-2">
   
-      <div class="row">
+    <div class="row">
         <div class="col-lg-12 margin-tb">
           <div class="pull-left">
             <h2>Wellness Visits  <i class="fas fa-stethoscope"></i></h2>
           </div>
-          <div class="pull-right mb-2">
+        </div>
+      </div>
+      
+      <div class="row">
+        <div class="col-lg-12 margin-tb">
+          <div class="pull-left mb-2">
             <a class="btn btn-success" href="{{ route('myHealth.create') }}"> Add Wellness Visit</a>
+          </div>
+          <div class="pull-right mb-2">
+            <a id="popupHelp" class="btn btn-primary"> Help <i class="fas fa-info"></i></a>
           </div>
         </div>
       </div>
@@ -103,6 +110,19 @@
  
 
   <script type="text/javascript">
+
+    $('#popupHelp').on('click', function () {
+      Swal.fire({
+        title: "Wellness",
+        html: `
+        <h4>You can <b>hover (or click)</b> over the 
+        <a autofocus>Reason/Diagnosis</a>
+        field to see details</h4>
+      `,
+        width: 700,
+        icon: "info"
+        });
+    })
       
      $(document).ready( function () {
       $.ajaxSetup({

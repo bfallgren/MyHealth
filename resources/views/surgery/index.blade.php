@@ -16,14 +16,22 @@
       <div class="row">
         <div class="col-lg-12 margin-tb">
           <div class="pull-left">
-          <h2>Surgeries & Procedures  <i class="fas fa-procedures"></i></h2>
+            <h2>Surgeries & Procedures  <i class="fas fa-procedures"></i></h2>
+          </div>  
+        </div>
+      </div>
+      
+      <div class="row">
+        <div class="col-lg-12 margin-tb">
+          <div class="pull-left mb-2">
+            <a class="btn btn-success" href="{{ route('surgery.create') }}"> Add Surgery/Procedure</a>
           </div>
           <div class="pull-right mb-2">
-            <a class="btn btn-success" href="{{ route('surgery.create') }}"> Add Surgery/Procedure</a>
+            <a id="popupHelp" class="btn btn-primary"> Help <i class="fas fa-info"></i></a>
           </div>
         </div>
       </div>
-        
+
       @if ($message = Session::get('success'))
           <div class="alert alert-success">
               <p>{{ $message }}</p>
@@ -101,6 +109,19 @@
  
 
   <script type="text/javascript">
+
+    $('#popupHelp').on('click', function () {
+      Swal.fire({
+        title: "Surgeries & Procedures",
+        html: `
+        <h4>You can <b>hover (or click)</b> over the 
+        <a autofocus>Reason/Diagnosis</a>
+        field to see details</h4>
+      `,
+        width: 700,
+        icon: "info"
+        });
+    })
       
      $(document).ready( function () {
       $.ajaxSetup({

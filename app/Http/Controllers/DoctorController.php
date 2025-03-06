@@ -26,6 +26,7 @@ class DoctorController extends Controller
            
         $data = DB::table('doctors')
         ->where('patientID','=',$currentuser)
+        ->orderBy('active', 'desc')
         ->orderBy('name', 'asc')
         ->get();
           if(request()->ajax()) {

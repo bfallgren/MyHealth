@@ -23,18 +23,27 @@
   <body>
   
     <div class="container mt-2">
-  
       <div class="row">
         <div class="col-lg-12 margin-tb">
           <div class="pull-left">
             <h2>Lab Templates</h2>
           </div>
+        </div>
+      </div>
+      
+      <div class="container mt-2">
+      <div class="row">
+        <div class="col-lg-12 margin-tb">
+          <div class="pull-left mb-2">
+            <a class="btn btn-success btn-xs" href="{{ route('labtmpl.create') }}"> Add Template</a>
+            <a name="bulk_delete" id="bulk_delete" class="btn btn-danger btn-xs" title = "Delete selected lab templates">Delete Template(s)</a>
+          </div>
           <div class="pull-right mb-2">
-            <a class="btn btn-success" href="{{ route('labtmpl.create') }}"> Add Template</a>
+            <a id="popupHelp" class="btn btn-primary"> Help <i class="fas fa-info"></i></a>
           </div>
         </div>
       </div>
-        
+
       @if ($message = Session::get('success'))
           <div class="alert alert-success">
               <p>{{ $message }}</p>
@@ -42,29 +51,28 @@
       @endif
        
       <div class="card-body">
-      <div class="container">
-          <input type="checkbox" id='select-all'>Select All
-          <br>
-          <button type="button" name="bulk_delete" id="bulk_delete" class="btn btn-danger btn-xs" title = "Delete selected lab templates">Delete</button>
-          <button type="button" name="bulk_add" id="bulk_add" class="btn btn-success btn-xs" title="Add selected templates to Lab table">Add</button>
-          <button type="button" name="mod_date" id="mod_date" class="btn btn-primary btn-xs" title="Override selected dates">Overide Date</button>
-      
-        <table style=width:100% class="row-border table" id="datatable-crud">
-          <thead style=color:red>
-            <tr>
-              <th></th>
-              <th>Name</th>
-              <th>Test Date</th>
-              <th>Component</th>
-              <th>Measured Value</th>
-              <th>Good Range</th>
-              <th>Comments</th>
-              <th>Action</th>
-            </tr>
-          </thead>
-        </table>
-
-      </div>
+        <div class="container">
+            <input type="checkbox" id='select-all'>Select All
+            <br>
+            
+            <button type="button" name="bulk_add" id="bulk_add" class="btn btn-success btn-xs" title="Add selected templates to Lab table (measured value unchanged)">Add to Lab Database</button>
+            <button type="button" name="mod_date" id="mod_date" class="btn btn-primary btn-xs" title="Override selected dates">Overide Date</button>
+        
+            <table style=width:100% class="row-border table" id="datatable-crud">
+              <thead style=color:red>
+                <tr>
+                  <th></th>
+                  <th>Name</th>
+                  <th>Test Date</th>
+                  <th>Component</th>
+                  <th>Measured Value</th>
+                  <th>Good Range</th>
+                  <th>Comments</th>
+                  <th>Action</th>
+                </tr>
+              </thead>
+            </table>
+          </div>
 
       <div id="moddateModal" class="modal fade" role="dialog">
           <div class="modal-dialog">
@@ -81,12 +89,26 @@
                   </div>
               </div>
           </div>
-      </div>
-
+    </div>
   </body>
 
 <script type="text/javascript">
-    
+ 
+ $('#popupHelp').on('click', function () {
+      Swal.fire({
+        title: "Lab Template",
+        html: `
+        <h4>First <b>select the labs</b> that you want to insert.
+        Then <b>select <a autofocus>Override Date</a></b> to change the selected date(s).
+        Again <b>select the labs</b> that you want to insert.
+        Then <b>select <a autofocus>Add to Lab Database</a> </b> to insert the selected labs
+        into the database. You may also use the <a autofocus>Search</a> field to filter on labs 
+        and then choose <b>Select All</b></h4>
+      `,
+        width: 700,
+        icon: "info"
+        });
+    })
       
  $(document).ready( function () {
       $.ajaxSetup({
@@ -137,7 +159,7 @@
                   'select': {
                    'style': 'multi'
                     },
-                 order: [[1, 'asc']]
+                 order: [[1, 'asc'], [3, 'asc']]
               
       });
 

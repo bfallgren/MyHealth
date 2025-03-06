@@ -1,6 +1,21 @@
-Release Notes<br>
+ToDo:<br>
 
-Version 6.0 {Laravel 7.30; php 7.4} <br>
+<br>
+Version 6.2 {Laravel 9.52.16; php 8.0.2} <br>
+--  Release update Laravel and PHP<br>
+-- sort doctors by active and name <br>
+-- Sort labs by date entered (desc) and component (asc) <br>
+-- Add hints for index pages with hover or eyeglass or other functionality <br>
+-- Reformat Index pages <br>
+<br>
+
+Version 6.1 {Laravel 7.39; php 7.4} <br>
+--  Change default item per page to 25 on labs index view<br>
+--  increase medicine.notes field from 80 to 255<br>
+--  Sort LabTemplate index view by Template and Component<br>
+--  Add character count to long fields (Medications, Wellness, Imaging, Surgery, Famhist, Labs, Vaccine)<br>
+<br>
+Version 6.0 {Laravel 7.30; php 7.4} (commit 20240127)<br>
 --  Added Lab Templates for bulk insert of Lab records (introduced SweetAlert)<br>
 --  Added Release Notes to Help menu<br>
 <br>
@@ -21,10 +36,7 @@ Version 5.1 {Laravel 7.30; php 7.4} (commit 20230827)<br>
 --  turned off search/paging feature for Patient index view<br>
 --  Upgraded to Laravel v7<br>
 <br>
-ToDo:<br>
---  increase medicine.notes field from 80 to 255<br>
-<br>
-<br>
+
 Version 4.2 (commit 20220331)<br>
 -- Added Authentication to filter rows for current user<br>
 <br>

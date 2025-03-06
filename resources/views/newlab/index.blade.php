@@ -18,8 +18,16 @@
           <div class="pull-left">
             <h2>Labs <i class="fas fa-vials"></i></h2>
           </div>
-          <div class="pull-right mb-2">
+        </div>
+      </div>
+
+      <div class="row">
+        <div class="col-lg-12 margin-tb">
+          <div class="pull-left mb-2">
             <a class="btn btn-success" href="{{ route('lab.create') }}"> Add Labwork</a>
+          </div>
+          <div class="pull-right mb-2">
+            <a id="popupHelp" class="btn btn-primary"> Help <i class="fas fa-info"></i></a>
           </div>
         </div>
       </div>
@@ -101,6 +109,19 @@
  
 
   <script type="text/javascript">
+
+    $('#popupHelp').on('click', function () {
+      Swal.fire({
+        title: "Labs",
+        html: `
+        <h4>You can <b>click</b> on the
+        <a autofocus>Eyeglass icon</a>
+        to see comments</h4>
+      `,
+        width: 600,
+        icon: "info"
+        });
+    })
       
      $(document).ready( function () {
       $.ajaxSetup({
@@ -114,6 +135,7 @@
 
            processing: true,
            serverSide: true,
+           pageLength: 25,
            
            dom: '<Blf<t>ip>', /* Buttons, Length and filter above, information and pagination below table: */
             buttons: [
@@ -206,13 +228,7 @@
                     { "targets": 8, "visible":false}    
                     
                   ],
-                  
-          
-
-          order: [[0, 'desc']]
-
-         
-              
+          order: [[0, 'desc'], [1, 'asc']]              
       });
 
       

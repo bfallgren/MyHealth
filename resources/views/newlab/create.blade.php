@@ -46,7 +46,11 @@
             </div>
             <div class="form-group col-md-4">
               <label for="comments">Comments:</label>
-              <textarea type="text" size="80" maxlength="512" class="form-control" name="comments"></textarea>
+              <textarea type="text" size="80" maxlength="512" class="form-control" name="comments" id="ta_cmnt"></textarea>
+              <div id="cmnt-count">
+                <span id="curr-cmnt-cnt">0</span>
+                <span id="max-cmnt-cnt">/ 512</span>
+              </div>
             </div>
           </div>
         </div>
@@ -60,6 +64,19 @@
         </div>
       </form>
     </div>
+    <script>
+    
+    $('#ta_cmnt').keyup(function() {
+      
+      var characterCount = $(this).val().length,
+          current = $('#curr-cmnt-cnt'),
+          maximum = $('#max-cmnt-cnt'),
+          theCount = $('#cmnt-count');
+        
+      current.text(characterCount);   
+          
+    });
+  </script>
   </body>
 </html>
 @endsection
